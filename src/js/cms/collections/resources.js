@@ -51,7 +51,7 @@ const resources = (label, name, tax = null, relations = false, download = false,
     return {
     name: name,
     label: label,
-    description: "Resource list",
+    description: `${name} list`,
     summary: "{{title}}",
     show_preview_links: true,
     folder: `site/content/${name}`,

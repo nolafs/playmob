@@ -1,4 +1,5 @@
 <head>
+  <base href="{{ if ne hugo.Environment "production" }}/{{ else }}{{ $.Site.BaseURL }}{{ end }}">
   <link rel="canonical" href="{{ .Permalink }}">
   <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
   {{"<!-- CSS -->" | safeHTML }}

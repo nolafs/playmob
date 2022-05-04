@@ -11,7 +11,7 @@ import testimonials from "./cms/collections/testimonials";
 
 // Extend CMS
 import { ColorControl, ColorPreview } from "netlify-cms-widget-colorpicker";
-import richText from 'netlify-cms-widget-richtext';
+// import richText from 'netlify-cms-widget-richtext';
 
 
 
@@ -23,7 +23,7 @@ CMS.init();
 */
 
 CMS.registerWidget("color", ColorControl, ColorPreview);
-CMS.registerWidget('richtext', RichTextControl, RichTextPreview)
+//CMS.registerWidget('richtext', RichTextControl, RichTextPreview)
 
 
 CMS.init({
@@ -39,6 +39,11 @@ CMS.init({
         //publish_mode: "editorial_workflow",
         media_folder: 'site/static/uploads',
         public_folder: '/uploads',
+        slug: {
+            encoding: "ascii",
+            clean_accents: true,
+            sanitize_replacement: "-"
+        },
         collections: [
             pages,
             resources('Case Studies', 'case-studies', true, true,  true, false, true),

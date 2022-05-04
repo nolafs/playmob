@@ -2,10 +2,9 @@ const authors = {
     name: "authors",
     label: "Authors",
     label_singular: "Author",
-    folder: "site/content/authors/",
+    folder: "site/content/authors",
     path: "{{slug}}/_index",
     sortable_fields: [ 'title' ],
-    identifier_field: "name",
     create: true,
     editor: {
         preview: false
