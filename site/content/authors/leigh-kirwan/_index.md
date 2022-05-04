@@ -1,5 +1,5 @@
 ---
-title: Leigh Kirwan
+title: test
 occupation: Designer
 Summary: "Master of the Universe "
 image: /uploads/author-temp-1.png
