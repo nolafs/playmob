@@ -1,0 +1,26 @@
+twitter:
+  url: ""
+  active: true
+  num: 1
+  id: playmob
+links:
+  - type: Facebook
+    id: fa-facebook-f
+    url: http://facebook
+    hide: false
+  - type: Soundcloud
+    id: fa-soundcloud
+    url: http://soundcloud
+    hide: true
+  - type: Twitter
+    id: fa-twitter
+    url: https://twitter.com
+    hide: false
+  - type: YouTube
+    id: fa-youtube
+    url: /youtube
+    hide: true
+  - hide: false
+    type: Linkedin
+    id: fa-linkedin
+    url: /

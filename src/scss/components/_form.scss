@@ -1,0 +1,24 @@
+.sib-form-block__button {
+  @apply btn btn-secondary text-neutral-content;
+}
+
+.sib-form {
+  @apply form-control;
+}
+
+#sib-container {
+  @apply bg-transparent text-neutral-content p-0 #{!important};
+}
+
+fieldset {
+
+  @apply text-neutral;
+
+  p {
+    @apply text-sm py-1 px-1;
+  }
+
+  label {
+    @apply md:text-xl
+  }
+}

@@ -1,0 +1,43 @@
+<div class="w-full max-w-md" x-data x-show="!$store.profile.isLoggedIn">
+    <div  x-data="login" >
+        <form class="form-control" action=""  @focusout="change" @input="change" @submit="submit" x-show="!success">
+            <label class="label">
+                <span class="label-text">Email</span>
+            </label>
+            <input name="email" type="email" id="email" placeholder="Email"  class="input input-bordered"
+                   x-bind:class="{'input-error  mb-0': email.errorMessage}"
+                   data-rules='["required","email"]' data-server-errors='[]'
+            >
+            <p class="mt-2 text-xs text-error" x-show="email.errorMessage" x-text="email.errorMessage" x-transition:enter></p>
+            <label class="label">
+                <span class="label-text">Password</span>
+            </label>
+            <input name="password" type="password" id="password" placeholder="Password" class="input input-bordered"
+                   x-bind:class="{'input-error  mb-0': password.errorMessage}"
+                   data-rules='["required"]' data-server-errors='[]'
+            >
+            <p class="mt-2 text-xs text-error" x-show="password.errorMessage" x-text="password.errorMessage" x-transition:enter></p>
+
+            <div class="w-full max-w-md text-center mt-10 font-bold" x-show="(authError)" x-transition:enter>
+                <span x-html="message"></span>
+            </div>
+
+            <input type="submit" class="mt-10 btn btn-secondary" x-show="!loading">
+            <button class="mt-10 btn btn-secondary btn-outline loading" x-show="loading">Submit</button>
+        </form>
+
+        <div class="w-full max-w-md text-center mt-10" x-show="(success)" x-transition:enter>
+            <span x-html="message"></span>
+        </div>
+        {{ if eq .Site.Params.public true }}
+        <div class="mt-10 w-full text-center" x-show="!success">
+            If you are not a member, sign up <a class="underline" href="/account/login">here</a>.
+        </div>
+        {{end}}
+    </div>
+</div>
+<div class="m-t-5 prose text-center" x-data x-show="$store.profile.isLoggedIn">
+    <p>You already logged in</p>
+    <button class="btn" @click="$dispatch('login-drawer')">Go to your profile</button>
+    <a href="/admin" class="btn" x-data x-show="($store.profile.role === 'admin')">Visit CMS</a>
+</div>

@@ -1,0 +1,35 @@
+
+{{if .authors }}
+    {{$details := .details | default true}}
+    {{$classes := .classes | default ""}}
+    {{$width :=  .width | default "40"}}
+    {{$height :=  .height | default "40"}}
+    {{$authorsPages := (where site.Pages "Type" "authors") }}
+    {{$authors := .authors }}
+    {{$data := slice }}
+    {{range $authors }}
+        {{$d := . }}
+        {{range $authorsPages}}
+            {{if eq $d .Title }}
+                {{$data = $data | append  . }}
+            {{end}}
+        {{end}}
+    {{end}}
+    {{range $data}}
+        {{if eq $details true}} <a href="{{.RelPermalink}}"> {{end}}
+            <div class="not-prose flex place-content-start mt-4 gap-x-4">
+                    <div>
+                        {{if .Params.image }}
+                            <div class="block w-10 h-10">
+                                {{partial "util/image-lfg" (dict "image" .Params.image  "width" $width "height" $height "classes" (printf "mb-0 %s" $classes) )}}
+                            </div>
+                        {{end}}
+                    </div>
+                    <div class="not-prose text-sm ">
+                        <span class="no-prose text-secondary font-bold">{{.Title}}</span>
+                        <div class="no-prose w-full">{{.Params.occupation}}</div>
+                    </div>
+            </div>
+    {{if eq $details true}} </a>{{end}}
+    {{end}}
+{{end}}

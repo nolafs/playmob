@@ -1,0 +1,112 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+<section id="section-{{$context.title | urlize }}">
+    <div class="relative flex flex-col items-center justify-center w-full px-4 py-10 lg:py-20
+    {{- if eq .styling.full false }} container mx-auto {{ end -}}
+    {{- if eq .styling.center true }} text-center {{ end -}}
+    {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+    {{- if .styling.background }} bg-cover bg-center {{ end -}}
+    {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+    {{- if .styling.textColor }} {{ .styling.textColor }} {{- else }} text-white {{ end -}}
+    {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+    {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+    "
+
+     {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+    >
+        {{if .styling.background}}
+        <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+        {{end}}
+        {{ partial "blocks/components/comp-intro" . }}
+        {{partial "blocks/components/comp-nav" . }}
+
+        {{with .columns }}
+        <div class="container block-columns {{ if or (eq $context.intro_hide false) (eq $context.header_hide false) }} mt-20 {{end}}">
+            <div class="flex flex-col md:flex-row gap-x-4 lg:gap-x-10 gap-y-10 lg:gap-y-0 justify-between justify-items-stretch items-center mx-auto">
+                {{range . }}
+                    {{if eq .type "content"}}
+                        <div class="w-full mx-auto prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl {{- if $context.styling.headerColor }} header-{{$context.styling.headerColor}}{{end}} {{- if $context.styling.textColor }} {{ $context.styling.textColor }} {{end}}">{{.content | markdownify }}</div>
+                     {{end}}
+                    {{if eq .type "image" }}
+                        <div class="w-full">
+                            {{ $pathArr := split .image  "." }}
+                            {{ $pathLen := len $pathArr }}
+                            {{ $ext := index $pathArr (sub $pathLen 1) }}
+                            {{ if eq $ext "svg" }}
+                                {{.File.Dir .image }}
+                                {{  readFile (print "static" .image) | safeHTML }}
+                             {{else}}
+                                {{partial "util/image-lfg" (dict "image" .image "baseSize" "520" "ratio" "auto" "classes" "w-full h-full mx-auto") }}
+                             {{end}}
+
+                        </div>
+                    {{end}}
+                    {{if eq .type "cards" }}
+
+                            <div class="card h-full justify-self-stretch bg-base-100 text-base-content shadow-xl" data-speed="{{if .anim}} {{.anim}} {{else}} 1 {{end}}">
+                                {{with .image}}
+                                <figure>
+                                    <figure class="w-full h-full">
+                                        {{ partial "util/image-lfg" (dict "image" .  "width" "400" "height" "225" "classes" "w-full h-full object-cover")}}
+                                    </figure>
+                                </figure>
+                                {{end}}
+                                <div class="card-body grow flex flex-col text-left">
+                                    <h3 class="card-title leading-tight font-bold text-md md:text-lg  xl:text-2xl text-secondary">
+                                        {{.title }}
+                                    </h3>
+                                    <p class="text-xs md:text-sm lg:text-base xl:text-xl">
+                                        {{.content | truncate 250 }}
+                                    </p>
+                                </div>
+                                {{with .collection_content }}
+
+                                <div class="card-actions bg-primary text-neutral-content text-left">
+                                    <div class="w-full flex p-5 space-x-4 justify-between items-center">
+                                        {{$page := split . "/"}}
+                                        {{$content := site.GetPage (printf "case-studies/%s" ( index $page 0 ))}}
+                                        {{with $content}}
+                                        <div>
+                                            {{if .Params.featured_image }}
+                                                {{with  .Params.featured_image }}
+                                                    {{if .src }}
+                                                            <figure class="w-full h-full w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[80px] lg:h-[80px]">
+                                                                {{ $resources := $content.Resources.GetMatch  .src  }}
+                                                                {{ partial "util/image" (dict "context" $content "image" $resources "alt" .alt "option" "Fill" "size" "80x80 center" "baseSize" 80 "className" "mask mask-circle max-w-none w-full h-full object-cover")}}
+                                                            </figure>
+                                                    {{else}}
+                                                        {{ with $context.Site.Data.theme.placeholder_img }}
+                                                            <figure class="w-full h-full w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[80px] lg:h-[80px]">
+                                                                {{ partial "util/image-lfg" (dict "image" .  "width" "80" "height" "80" "classes" "mask mask-circle max-w-none w-full h-full object-cover" )}}
+                                                            </figure>
+                                                        {{end}}
+                                                    {{end}}
+                                                {{end}}
+                                            {{else}}
+                                                {{ with site.Data.theme.placeholder_img }}
+                                                    <figure class="w-full h-full w-[30px] h-[30px] md:w-[40px] md:h-[40px] lg:w-[80px] lg:h-[80px]">
+                                                        {{ partial "util/image-lfg" (dict "image" .  "width" "80" "height" "80" "classes" "mask mask-circle max-w-none w-full h-full object-cover" )}}
+                                                    </figure>
+                                                {{end}}
+                                            {{end}}
+                                        </div>
+                                        <div class="flex-grow leading-tight">
+                                            <div class="text-secondary text-xs lg:text-base font-semibold">{{.Title}}</div>
+                                            <small class="block w-full clear-both">{{.Params.client}}</small>
+                                        </div>
+                                        <div><a href="{{.RelPermalink}}" class="btn btn-square btn-sm lg:btn-md btn-secondary" aria-label="{{.Title}}"><i class="fa-solid fa-arrow-right lg:fa-xl"></i></a></div>
+                                        {{end}}
+                                    </div>
+                                </div>
+                                {{end}}
+                            </div>
+
+                    {{end}}
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+    </div>
+</section>
+{{end}}

@@ -1,0 +1,173 @@
+############################
+## Basic Info
+############################
+
+cms_navbar = true
+preloader = false
+description = "We believe games have the power to make real-world change."
+logo=""
+logo_mobile=""
+ogimage= "/images/share-img.png"
+theme = "playmob"
+themeSwitch = false
+
+############################
+## PWA
+############################
+
+enablePWA = true
+
+############################
+## Login
+############################
+
+login = true  # Show login button
+public = false # Allow users to create accounts
+
+############################
+## Netlify CMS
+############################
+
+netlifyCms = true
+
+############################
+## Site Features
+############################
+
+# Privacy pack
+#   Show a cookie consent message to visitors
+#   Anonymize IP in Google Analytics (if enabled)
+privacy_pack = true
+
+############################
+## Regional Settings
+############################
+
+# Date and time format (refer to https://sourcethemes.com/academic/docs/customization/#date-format )
+#   Examples: "Mon, Jan 2, 2006" or "2006-01-02"
+date_format = "January 2, 2006"
+#   Examples: "3:04 pm" or "15:04"
+time_format = "3:04 PM"
+
+# Address format (choose from the [address_formats] list below or add you own to the list).
+address_format = "en-gb"
+
+############################
+## Google Translate
+############################
+
+google_translate = false
+
+############################
+## Search
+############################
+[search]
+  # Search provider:
+  #   0: No search engine
+  #   1: Fuse (built-in)
+  #   2: Algolia (https://www.algolia.com)
+  engine = 2
+
+  # Configuration of Algolia search engine.
+  # Paste the values from your Algolia dashboard.
+  [search.algolia]
+    appId= 'Z73FBMBJ54'
+    apiKey = 'a86a35bfacf289a8fef433c54bf64662'
+    siteId =  '83f6081d-766e-418b-a648-e7b7a11e4b86'
+    branch =  'main'
+    selector = 'div#search'
+
+
+############################
+## Maps
+############################
+# Geographic coordinates
+# To get your coordinates, right-click on Google Maps and choose "What's here?". The coords will show up at the bottom.
+[coordinates]
+  latitude = "51.5761253"
+  longitude = "-0.3269709"
+
+[map]
+# To show your address on a map in the Contact widget, enter your latitude and longitude (above)
+# and choose a map provider below.
+#
+# To use Google Maps, set `engine` to 1 and enter your API key that can be obtained here:
+#   https://developers.google.com/maps/documentation/javascript/get-api-key
+# To use OpenStreetMap tiles, set `engine` to 2.
+# To use OpenStreetMap on a high traffic site, set `engine` to 3 and enter your API key that can be obtained here:
+#   https://www.mapbox.com/studio/account/tokens
+#
+# Map provider:
+#   0: No map
+#   1: Google Maps
+#   2: OpenStreetMap (Mapnik)
+#   3: OpenStreetMap (Mapbox)
+  engine = 1
+  api_key = "AIzaSyA5M6x-SUnBWH2JPO5aCPy3dPvbQ0HWFic"
+  zoom = 11
+############################
+## Marketing
+############################
+[marketing]
+  #google_tag_manager = ""
+
+############################
+## Privacy
+############################
+
+[privacy]
+  [privacy.disqus]
+    disable = false
+  [privacy.googleAnalytics]
+    anonymizeIP = true
+    disable = false
+    respectDoNotTrack = true
+    useSessionStorage = false
+  [privacy.instagram]
+    disable = false
+    simple = false
+  [privacy.twitter]
+    disable = false
+    enableDNT = false
+    simple = false
+  [privacy.vimeo]
+    disable = false
+    simple = false
+  [privacy.youtube]
+    disable = false
+    privacyEnhanced = false
+
+
+############################
+## Share
+############################
+[page.share]
+  enable = true
+  Twitter = true
+  Facebook = true
+  Linkedin = true
+  Whatsapp = false
+  Pinterest = false
+  Tumblr = false
+  HackerNews = false
+  Reddit = false
+  VK = false
+  Buffer = false
+  Xing = false
+  Line = false
+  Instapaper = false
+  Pocket = false
+  Digg = false
+  Stumbleupon = false
+  Flipboard = false
+  Weibo = false
+  Renren = false
+  Myspace = false
+  Blogger = false
+  Baidu = false
+  Odnoklassniki = false
+  Evernote = false
+  Skype = false
+  Trello = false
+  Mix = false
+  Telegram = false

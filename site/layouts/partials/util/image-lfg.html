@@ -1,0 +1,27 @@
+{{$baseSize := .baseSize | default "400"}}
+{{$width := .width | default "400"}}
+{{$height := .height | default "225"}}
+{{$classes := .classes | default ""}}
+{{if .ratio}}
+    {{if eq .ratio "square"}}
+        <img  data-src="{{.image}}?nf_resize=smartcrop&w={{$baseSize}}&h={{$baseSize}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+    {{if eq .ratio "wide"}}
+        <img  data-src="{{.image}}?nf_resize=smartcrop&w={{$baseSize}}&h={{ mul 9 (div (int $baseSize) 16)  }}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+    {{if eq .ratio "auto"}}
+        <img  data-src="{{.image}}?nf_resize=fit&w={{$baseSize}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+    {{if eq .ratio "height"}}
+        <img  data-src="{{.image}}?nf_resize=fit&h={{$baseSize}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+    {{if eq .ratio "fixed"}}
+        <img  data-src="{{.image}}?nf_resize=fit&h={{$baseSize}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+{{else}}
+    {{if and ($width) ($height) }}
+        <img  data-src="{{.image}}?nf_resize=smartcrop&w={{$width}}&h={{$height}}" width="{{$width}}" height="{{$height}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{else}}
+        <img  data-src="{{.image}}" alt="{{.name}}" class="lazyload {{.classes}}">
+    {{end}}
+{{end}}

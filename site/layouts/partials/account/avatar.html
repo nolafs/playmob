@@ -1,0 +1,23 @@
+{{$size := .size }}
+<template x-data x-if="$store.profile.isLoggedIn">
+    <div class="avatar placeholder px-3" >
+        <div class="bg-secondary text-neutral-content rounded-full {{if $size }}{{if eq $size "large"}}w-32 h-32{{end}}{{if eq $size "medium"}}w-24 h-24{{end}}{{if eq $size "small"}}w-16 h-16{{end}}{{if eq $size "xsmall"}}w-8 h-8{{end}}{{else}}w-32 h-32{{end}}">
+            {{if $size }}
+                {{if eq $size "large"}}
+                    <span class="text-3xl -leading-2" x-text="$store.profile.getUserFullName().initials"></span>
+                {{end}}
+                {{if eq $size "medium"}}
+                    <span class="text-xl" x-text="$store.profile.getUserFullName().initials"></span>
+                {{end}}
+                {{if eq $size "small"}}
+                    <span  x-text="$store.profile.getUserFullName().initials"></span>
+                {{end}}
+                {{if eq $size "xsmall"}}
+                    <span  x-text="$store.profile.getUserFullName().initials"></span>
+                {{end}}
+            {{else}}
+                <span class="text-3xl" x-text="$store.profile.getUserFullName().initials"></span>
+            {{end}}
+        </div>
+    </div>
+</template>

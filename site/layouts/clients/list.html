@@ -1,0 +1,18 @@
+{{ define "header" }}
+{{ partial "hero/hero" . }}
+{{ end }}
+{{ define "main" }}
+<div class="container mx-auto pt-12 pb-24">
+    <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <div class="col-span-1 xl:col-span-4">
+            <div class="grid grid-cols-1 gap-6">
+                {{ $paginator := .Paginate  .Pages  }}
+                {{ range $paginator.Pages }}
+                {{ .Render "summary" }}
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    {{ partial "pagination.html" (dict "context" . "paginator" .Paginator )}}
+</div>
+{{ end }}

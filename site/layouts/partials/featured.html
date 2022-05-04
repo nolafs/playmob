@@ -1,0 +1,94 @@
+{{$ctx := . }}
+{{ range first 1 (where .Pages.ByDate.Reverse ".Params.featured" "=" true) }}
+    <div class="w-full bg-neutral pt-5 pb-10">
+        <div class="container mx-auto px-5">
+            <div class="card md:card-side bg-base-100 text-base-content shadow-xl ">
+                {{$context := .}}
+                {{$parentUrl := .Parent.Title | urlize }}
+                {{$categories := .Param (printf "%s%s" (.Parent.Title | urlize ) "/categories") }}
+                {{$tags := .Param (printf "%s%s" (.Parent.Title | urlize ) "/tags") }}
+                {{if .Params.featured_image}}
+                    {{with  .Params.featured_image }}
+                        {{if .src }}
+                            <div class="md:w-1/2">
+                            <a href="{{ $context.Permalink }}" >
+                                <figure class=" h-full">
+                                    {{ $resources := $context.Page.Resources.GetMatch  .src  }}
+                                    {{ partial "util/image" (dict "context" $context "image" $resources "alt" .alt "option" "Fill" "size" "jpg 650x440  center" "baseSize" 650 "className" "w-full h-full")}}
+                                </figure>
+                            </a>
+                            </div>
+                        {{else}}
+                            {{ with $context.Site.Data.theme.placeholder_img }}
+                                <div class="md:w-1/2">
+                                <figure class="h-full">
+                                    {{ partial "util/image-lfg" (dict "image" .  "width" "650" "height" "440" "classes" "w-full h-full object-cover object-center" )}}
+                                </figure>
+                                </div>
+                            {{end}}
+
+                        {{end}}
+                    {{end}}
+                {{ else }}
+
+                {{ end }}
+                <div class="md:w-1/2 card-body flex flex-col">
+                    <div class="flex justify-between uppercase font-bold text-primary">
+                        <div>
+                            {{range $categories}}
+                                <a href="/{{$parentUrl}}/categories/{{.}}" class="text-base no-underline font-bold"><small>{{. | humanize}}</small></a>
+                            {{ end }}
+                        </div>
+                        <div><small>{{partial "util/get_dates" . }}</small></div>
+                    </div>
+                    <div class="flex gap-x-2 my-1">
+                        {{range $tags}}
+                            <a href="/{{$parentUrl}}/tags/{{.}}" class="no-underline font-semibold bg-primary uppercase text-neutral-content rounded text-xs px-3 py-1 ">{{. | humanize}}</a>
+                        {{ end }}
+                    </div>
+                    <h3 class="card-title leading-tight">
+                        <a href="{{ .Permalink }}"  class="font-bold text-2xl mb-2 md:text-3xl lg:text-4xl xl:text-5xl lg:mb-5 no-underline hover:text-primary">{{.Title}}</a>
+                    </h3>
+                    <p class="leading-tight text-sm lg:text-lg  xl:text-xl ">{{ .Summary | truncate 120 }}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 items-center mt-5">
+                        {{if .Params.client }}
+                        <div>
+                            <div class="block h-16 mb-6 md:mb-0">
+                                {{partial "util/get_client" (dict "client" .Params.client "details" false "classes" "h-full  w-auto")}}
+                            </div>
+                        </div>
+                         {{else}}
+                            {{if .Params.authors }}
+                            <div class="block h-16 mb-6 md:mb-0">
+                                {{partial "util/get_authors" (dict "authors" .Params.authors "details" true "classes" "mask mask-circle w-full h-full object-contain")}}
+                            </div>
+                            {{end}}
+                        {{end}}
+                        <div>
+                            <a class="btn btn-block btn-secondary xl:btn-lg text-white" href="{{ .RelPermalink }}">{{- if .Params.summary_button -}}{{.Params.summary_button}}{{- else -}}Learn More{{- end -}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ if eq $ctx.Params.twitter true}}
+            {{ if site.Data.socialmedia.twitter.active }}
+                {{with site.Data.socialmedia.twitter}}
+                    <div class="container mx-auto mt-10 px-5 text-neutral-content">
+                        <div class="flex flex-col md:flex-row gap-5">
+                            <div>
+                                <div class="flex items-center gap-x-2">
+                                    <i class="fa-brands fa-twitter text-5xl text-twitter"></i>
+                                    <h2 class="text-2xl font-semibold">Latest from Twitter</h2>
+                                </div>
+                            </div>
+                            <div id="tweets" class="tweets" x-data="twitter" x-init="setup('{{.id}}', '{{.num}}')">
+
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
+            {{end}}
+        {{end}}
+    </div>
+{{end}}

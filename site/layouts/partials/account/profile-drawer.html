@@ -1,0 +1,66 @@
+{{ "<!-- Profile Side Drawer -->" | safeHTML }}
+<div x-data="{open: false}" @login-drawer.window="open = ! open" >
+    <div class="fixed top-0 right-0 z-30 w-screen h-screen md:shadow-lg max-h-screen md:min-w-[500px] md:max-w-[40vw] md:max-w-[30vw] lg:max-w-[20vw]" x-show="open"
+         x-transition:enter="transition duration-1000"
+         x-transition:enter-start="transform translate-x-full"
+         x-transition:enter-end="transform translate-x-0"
+         x-transition:leave="transition duration-1000"
+         x-transition:leave-start="transform"
+         x-transition:leave-end="transform translate-x-full"
+    >
+        <div class="bg-base-100 color flex">
+            <div class="bg-pmSecondary-400 items-center p-3 text-secondary border-r  border-r-base-200" >
+                <div class="flex h-screen place-self-center" @click="open = ! open"><button class="text-white"><i class="fa-solid fa-arrow-right lg:fa-xl"></i></button></div>
+            </div>
+            <div class="grow overflow-y-auto h-full">
+                <div class="flex flex-col w-full h-screen " >
+                    <div class="hero">
+
+                        <div class="text-center w-full py-2 border-b  border-b-base-200" >
+                            <div class="w-full">
+                                {{partial "account/avatar" (dict "size" "large")}}
+                                <div x-show="$store.profile.isLoggedIn">
+                                    <h1 class="my-4"  x-text="$store.profile.getUserFullName().fullName"></h1>
+                                    <div class="flex justify-center items-center gap-x-2">
+                                    <button class="btn btn-secondary my-4" @click="$store.profile.logout()">
+                                        <i class="fas fa-sign-out-alt fa-lg"></i>
+                                        <span class="pl-2">Logout</span>
+                                    </button>
+                                    <a href="/admin" class="btn btn-secondary" x-data="$store.profile"  x-show="(role == 'admin')">Visit CMS</a>
+                                    </div>
+                                </div>
+                                <div  x-show="!$store.profile.isLoggedIn">
+                                    <h1 class="font-bold flex items-center justify-center"><span class="text-2xl pl-1">Sign In</span></h1>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="w-full overflow-y-auto h-full">
+                            <template x-if="!$store.profile.isLoggedIn">
+                                <div class="p-4">
+                                    {{ partial "account/login-form" }}
+                                </div>
+                            </template>
+                            <template x-if="$store.profile.isLoggedIn">
+                                <div class="p-4">
+                                    {{partial "account/user-info-form" .}}
+                                </div>
+                            </template>
+                        </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="fixed top-0 right-0 z-[9] w-screen h-screen bg-neutral-focus opacity-50" @click="open = ! open"  x-show="open"
+         x-transition:enter="transition duration-1000"
+         x-transition:enter-start="transform opacity-0"
+         x-transition:enter-end="transform  opacity-50"
+         x-transition:leave="transition duration-1000"
+         x-transition:leave-start="transform"
+         x-transition:leave-end="transform opacity-0"
+    ></div>
+</div>

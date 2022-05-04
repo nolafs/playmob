@@ -1,0 +1,22 @@
+{{if eq site.Params.google_translate true}}
+<div class="flex fixed right-0 bottom-12">
+    <div class="access-button bg-accent rounded-l-full p-1 tooltip tooltip-left tooltip-primary flex items-center " data-tip="Accessibility Options">
+        <a href="{{.Permalink}}#access-modal" class="btn btn-circle btn-sm">
+            <i class="fas fa-universal-access fa-2x"></i>
+        </a>
+    </div>
+</div>
+
+<div id="access-modal" class="modal">
+    <div class="modal-box">
+        <h1 class="text-2xl mb-3 font-bold">Accessibility Options</h1>
+        <p>Enim dolorem dolorum omnis atque necessitatibus. Consequatur aut adipisci qui iusto illo eaque. </p>
+        <div class="divider"></div>
+        <h1 class="text-1xl font-bold mb-3">Translate</h1>
+        <div id="google_translate_element"></div>
+        <div class="modal-action">
+            <a href="/#" class="btn">Close</a>
+        </div>
+    </div>
+</div>
+{{ end }}

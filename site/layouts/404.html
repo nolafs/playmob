@@ -1,0 +1,21 @@
+{{define "header" }}
+<div class="hero h-[50vh] max-h-full bg-neutral"  x-data x-init="$store.navSetup.disableHideLogo = true">
+    <div class="text-center  hero-content text-white">
+        <div class="max-w-md">
+            <h1 class="mb-5 text-5xl font-bold">
+                404
+            </h1>
+            <p class="mb-5">
+                Page not found
+            </p>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{ define "main" }}
+    <div class="p-4 lg:p-10 container mx-auto text-center h-72">
+    <h1 class="mb-5 text-2xl font-bold">Nothing Here...</h1>
+    <a href="/" class="btn btn-primary">Go to home</a>
+    </div>
+{{ end }}

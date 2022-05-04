@@ -1,0 +1,20 @@
+{{ define "header" }}
+    {{ partial "hero/hero" . }}
+{{ end }}
+{{ define "main" }}
+    {{if .Content }}
+        <div class="prose mx-auto prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl pt-12 pl-12 pr-12 pb-24">
+            {{ .Content  }}
+        </div>
+    {{end}}
+    <div class="form {{if .Content }} bg-primary text-white {{else}}  {{end}}">
+        <div class="flex flex-col items-center justify-center w-full {{if .Content }} pt-12 {{else}} pt-20 {{end}} pl-12 pr-12 pb-20">
+            {{if .Content }}
+            <div class="prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
+                <h2>Login</h2>
+            </div>
+            {{end}}
+            {{ partial "account/login-form" .}}
+        </div>
+    </div>
+{{ end }}

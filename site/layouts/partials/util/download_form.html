@@ -1,0 +1,158 @@
+<label for="download-modal" class="btn btn-secondary btn-block  md:btn-md lg:btn-lg">Download</label>
+{{ define "popup" }}
+    <div x-data="{
+                popup: false,
+                firstName : '',
+                firstNameDirty: false,
+                lastName : '',
+                lastNameDirty: false,
+                email: '',
+                emailDirty: false,
+                position: '',
+                positionDirty: false,
+                accept: true,
+                result: 'start',
+                isEmail (value) {return new RegExp('^\\S+@\\S+[\\.][0-9a-z]+$').test(String(value).toLowerCase())},
+                submitMessage (firstName, lastName, email, position, accept) {
+                    if (!firstName || firstName.length == 0 || !lastName || lastName.length == 0 || !email || !position || position.length == 0 || !accept ) {
+                        return;
+                    }
+
+
+                    let formElement = document.getElementById('form-data');
+                    let body = new URLSearchParams(new FormData(formElement)).toString();
+
+                     this.result = 'sending';
+
+                      return fetch('/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: body,
+                            })
+                                .then((response) => {
+
+                                    if (response.ok) {
+                                        console.log('SUCCESS', response)
+                                        formElement.reset();
+                                        this.result = 'success'
+
+                                        const link = document.createElement('a');
+                                        link.setAttribute('href', '{{.Params.download | absURL }}' );
+                                        link.setAttribute('download', '{{.Params.download | absURL }}');
+                                        link.click();
+
+                                        this.popup = false;
+                                    } else {
+                                        console.log('ERROR', response)
+                                        this.result = 'error'
+                                    }
+                                })
+                                .catch((error) => console.error(error));
+                                    }
+            }">
+        <!-- Download -->
+        <form hidden name="download"
+              method="POST"
+              data-netlify-honeypot="bot-field"
+              data-netlify="true">
+            <input name="firstName">
+            <input name="lastName">
+            <input name="email">
+            <input name="position">
+            <input name="case-study">
+            <input name="accept">
+            <input name="form-name">
+        </form>
+        <input type="checkbox" id="download-modal" class="modal-toggle" x-model="popup">
+        <label for="download-modal" class="modal cursor-pointer">
+
+            <div class="modal-box fixed max-w-[400px] text-center">
+                <label for="download-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                {{with site.Data.theme.download_popup }}
+                <h2 class="font-bold text-xl md:text-2xl mb-3">{{.title}}</h2>
+                {{.content}}
+                {{end}}
+                <div id="form" class="mt-5">
+                    <form class="form-control" id="form-data"
+                          x-on:submit.prevent="
+                           firstNameDirty = true;
+                           lastNameDirty = true;
+                          emailDirty = true;
+                          positionDirty = true;
+                          submitMessage(firstName, lastName, email, position, accept);"
+
+                    >
+                        <input type="hidden" name="form-name" value="download"/>
+                        <input type="hidden" name="case-studies" value="{{.Title}}"/>
+                        <!-- Full Name -->
+                        <div class="flex flex-col gap-4">
+                            <div class="space-y-4 md:columns-2 ">
+                                <div>
+                                    <!-- First Name -->
+                                    <fieldset>
+                                        <input class="input input-bordered  w-full" x-model="firstName" x-on:blur="firstNameDirty = true"
+                                               type="text" id="firstName" name="firstName" placeholder="*First Name">
+                                        <p x-show.transition="firstNameDirty && firstName.length == 0" style="color: red" x-cloak>
+                                            Please fill out your first name.
+                                        </p>
+                                    </fieldset>
+                                </div>
+                                <div>
+                                    <!-- Last Name -->
+                                    <fieldset>
+                                        <input class="input input-bordered  w-full" x-model="lastName" x-on:blur="lastNameDirty = true"
+                                               type="text" id="lastName" name="lastName" placeholder="*Last Name">
+                                        <p x-show.transition="lastNameDirty && lastName.length == 0" style="color: red" x-cloak>
+                                            Please fill out your last name.
+                                        </p>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <!-- Email -->
+                            <fieldset>
+                                <input x-model="email" x-on:blur="emailDirty = true" class="input input-bordered w-full"
+                                       type="email"
+                                       id="email" name="email" placeholder="*Email Address">
+                                <p class="mt-1 text-xs" x-show.transition="emailDirty && !isEmail(email)"
+                                   style="color: red" x-cloak>
+                                    Please provide a valid email.
+                                </p>
+                            </fieldset>
+                            <!-- Position -->
+                            <fieldset>
+                                <input x-model="position" x-on:blur="positionDirty = true"
+                                       class="input input-bordered w-full" type="text"
+                                       id="position" name="position" placeholder="*Position">
+                                <p class="mt-1 text-xs" x-show.transition="positionDirty && position.length == 0"
+                                   style="color: red" x-cloak>
+                                    Please fill out your position.
+                                </p>
+                            </fieldset>
+
+                        <p hidden>
+                            <label>ignore: <input name="bot-field"/></label>
+                        </p>
+                        <div class="flex justify-center">
+                            <fieldset >
+                                <label class="label cursor-pointer justify-start space-x-2 mx-auto">
+                                    <input type="checkbox" x-model="accept" id="accept" name="accept" checked="checked" class="checkbox">
+                                    {{with (printf "legal/%s" ( .Site.Data.contact.privacy ))}}
+                                        <span class="label-text">I accept the <a class="btn-link" href="{{.}}">Privacy Policy</a></span>
+                                    {{end}}
+                                </label>
+                                <p x-show.transition="accept == false" style="color: red" x-cloak>
+                                    Please accept our privacy policy.
+                                </p>
+                            </fieldset>
+                        </div>
+                            <button class="btn btn-block btn-secondary" type="submit">Download</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </label>
+    </div>
+{{ end }}

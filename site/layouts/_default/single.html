@@ -1,0 +1,19 @@
+{{ define "header" }}
+
+{{ end }}
+{{ define "main" }}
+    <article>
+        <div class="relative z-1 w-full py-10 md:py-20 px-5 bg-base-100">
+            {{ partial "hero/hero-single" . }}
+            <div class="container mx-auto prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl prose-primary">
+                {{ .Content }}
+                <div class="divider"></div>
+            </div>
+            {{ partial "blocks/block-layout.html" (dict "context" . "global" $)}}
+            {{.Render "footer"}}
+        </div>
+
+        {{partial "related" .}}
+    </article>
+{{ end }}
+

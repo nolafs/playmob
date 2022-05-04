@@ -1,0 +1,61 @@
+<div class="relative container w-full mx-auto overflow-hidden group" x-data="carousel()" x-init="init()">
+    <!-- carousel -->
+    <div class="carousel-wrapper relative">
+        <div class="carousel min-h-[150px]" x-ref="container"><!-- items container -->
+            {{$svg := .svg }}
+            {{$margin := .margin_x }}
+
+            {{$num_item_sm := .num_item_sm }}
+            {{$num_item_md := .num_item_md }}
+            {{$num_item_lg := .num_item_lg }}
+
+            {{range $index, $slides := .slides}}
+
+                {{$image_min := .min_width }}
+                {{$image_max := .max_width }}
+
+                <div id="item-{{$index}}" data-slide="{{$index}}"
+                     class="carousel-item justify-center items-center px-2 first:pl-4 first:pr-2 {{ if $num_item_sm -}} {{$num_item_sm}} {{- else -}} w-11/12 {{- end }} {{ if $num_item_md -}} {{$num_item_md}} {{- else -}} w-11/12 {{- end -}} {{if $num_item_lg}} {{$num_item_lg}} {{else}} w-11/12 {{- end -}}">
+                    {{if .label }}
+                        {{ if .image }}
+                            <figure {{if or ($image_max) ($image_min)  }} class="{{if $image_min}}min-w-[{{$image_min }}]{{end}} {{if $image_max}}max-w-[{{$image_max}}]{{end}}" {{end}}>
+                                {{if eq $svg true}}
+                                    <img src="{{.image}}" alt="{{.name}}" class="lazyload">
+                                {{else}}
+                                    <img src="{{.image}}" alt="{{.name}}" class="lazyload">
+                                {{end}}
+                                <figcaption>{{.label}}</figcaption>
+                            </figure>
+                        {{ else }}
+                            <h2>{{.label}}</h2>
+                        {{ end }}
+                    {{else}}
+                        {{if eq $svg true}}
+                            <div {{if or ($image_max) ($image_min)  }} class="{{if $image_min}}min-w-[{{$image_min }}]{{end}} {{if $image_max}}max-w-[{{$image_max}}]{{end}}" {{end}}>
+                                <img class="w-full lazyload" src="{{.image}}" alt="{{.name}}">
+                            </div>
+                        {{else}}
+                            <div {{if or ($image_max) ($image_min)  }} class="{{if $image_min}}min-w-[{{$image_min }}]{{end}} {{if $image_max}}max-w-[{{$image_max}}]{{end}}" {{end}}>
+                                {{partial "util/image-lfg" . }}
+                            </div>
+                        {{end}}
+                    {{ end }}
+                </div>
+            {{end}}
+        </div>
+        <div @click="scrollTo(prev)" :class="(prev !== null) ? '' : 'opacity-20'" class="hidden md:flex absolute top-1/2 left-5 -translate-y-1/2 transition-none">
+            <button class="btn bg-base-100 border-white text-secondary">
+                <i class="fa-solid fa-arrow-left lg:fa-xl"></i></button>
+        </div>
+        <div @click="scrollTo(next)" :class="(next !== null) ? '' : 'opacity-20'" class="hidden md:flex absolute top-1/2  right-5 -translate-y-1/2 transition-none">
+            <button class="btn bg-base-100 border-white text-secondary ">
+                <i class="fa-solid fa-arrow-right lg:fa-xl"></i></button>
+        </div>
+    </div>
+    <div class="hidden md:flex justify-center w-full py-2 gap-2 mt-5">
+        {{range $index, $value := .slides}}
+            <button id="bt-{{$index}}" data-button="{{$index}}" @click="goToIndex" :class="($el.dataset['button'] === currentIndex) ? 'btn-active' : ''"
+                    class="btn btn-circle btn-secondary btn-xs"><span class="opacity-0">{{add $index 1}}</span></button>
+        {{end}}
+    </div>
+</div>

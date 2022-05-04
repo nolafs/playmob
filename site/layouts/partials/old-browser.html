@@ -1,0 +1,68 @@
+{{ "<!--[if IE]>" | safeHTML }}
+<div class="oldBrowser">
+    <div class="content">
+        <h1>{{ .Site.Title }}</h1>
+
+        <h2>Old Browser</h2>
+        You are using an <strong>outdated</strong> browser. Please update your browser.
+
+        <ul id="browserlist">
+            <li id="chrome"><a href="https://www.google.com/chrome/">
+                <div class="icon"></div>
+                <h1>Google Chrome</h1><span>Download here</span></a></li>
+            <li id="firefox"><a
+                    href="https://www.mozilla.org/en-US/firefox/">
+                <div class="icon"></div>
+                <h1>Mozilla Firefox</h1><span>Download here</span></a></li>
+            <li id="safari"><a href="http://www.apple.com/safari/">
+                <div class="icon"></div>
+                <h1>Safari</h1><span>Download here</span></a></li>
+            <li id="opera"><a
+                    href="https://www.opera.com/">
+                <div class="icon"></div>
+                <h1>Opera</h1><span>Download here</span></a></li>
+            <li id="ie"><a href="https://www.microsoft.com/en-us/edge">
+                <div class="icon"></div>
+                <h1>Edge</h1><span>Download here</span></a></li>
+        </ul>
+
+        <div class="footer">For more information please visit <a href="http://browsehappy.com/">Browse Happy</a></div>
+    </div>
+</div>
+{{ "<![endif]-->" | safeHTML }}
+
+{{- if eq site.Params.IE11_support false -}}
+<div class="ie-message">
+    <div class="oldBrowser">
+        <div class="content">
+            <h1>{{ .Site.Title }}</h1>
+
+            <h2>Internet Explorer</h2>
+            You are using an <strong>outdated</strong> Internet Explorer browser. Internet Explorer has been discontinued by Microsoft.
+            Browser is highly insecure. Please update your browser.
+
+            <ul id="browserlist">
+                <li id="chrome"><a href="https://www.google.com/chrome/">
+                    <div class="icon"></div>
+                    <h1>Google Chrome</h1><span>Download here</span></a></li>
+                <li id="firefox"><a
+                        href="https://www.mozilla.org/en-US/firefox/">
+                    <div class="icon"></div>
+                    <h1>Mozilla Firefox</h1><span>Download here</span></a></li>
+                <li id="safari"><a href="http://www.apple.com/safari/">
+                    <div class="icon"></div>
+                    <h1>Safari</h1><span>Download here</span></a></li>
+                <li id="opera"><a
+                        href="https://www.opera.com/">
+                    <div class="icon"></div>
+                    <h1>Opera</h1><span>Download here</span></a></li>
+                <li id="ie"><a href="https://www.microsoft.com/en-us/edge">
+                    <div class="icon"></div>
+                    <h1>Edge</h1><span>Download here</span></a></li>
+            </ul>
+
+            <div class="footer">For more information please visit <a href="http://browsehappy.com/">Browse Happy</a></div>
+        </div>
+    </div>
+</div>
+{{- end -}}

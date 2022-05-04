@@ -1,0 +1,19 @@
+
+{{ if or (eq .intro_hide false) (eq .header_hide false) }}
+    <div class="{{- if .styling.center }} max-w-xl {{end}} block-content">
+        <div class="z-10 prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl {{ if eq .intro_hide false }} mb-5 {{end}}">
+            {{if eq .header_hide false}}
+                {{ if .title }}<h2 class="{{ if eq .intro_hide true }} mb-0 {{end}} {{- if .styling.headerColor }} {{ .styling.headerColor }} {{- end }} ">{{.title | markdownify }}</h2>{{ end }}
+            {{end}}
+            {{ if eq .intro_hide false }}
+                <div class="leading-tight {{- if .styling.textColor }} {{ .styling.textColor }} {{- end }}">
+                {{ if not ( strings.Contains .body "<p>" ) }}
+                    {{.body | markdownify | safeHTML}}
+                {{else}}
+                    {{.body | markdownify | safeHTML}}
+                {{end}}
+                </div>
+            {{end}}
+        </div>
+    </div>
+{{ end }}

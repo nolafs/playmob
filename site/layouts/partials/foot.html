@@ -1,0 +1,112 @@
+{{"<!-- Foot -->" | safeHTML }}
+
+{{ if eq site.Params.map.active 1 }}
+    {{"<!-- Google Maps -->" | safeHTML }}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ site.Params.map.api_key }}"></script>
+{{ end }}
+
+
+{{ if eq site.Params.search.engine 1 }}
+{{"<!-- Search Fuse-->" | safeHTML }}
+{{/* Fuse search result template. */}}
+<script id="search-hit-fuse-template" type="text/x-template">
+    <div class="search-hit" id="summary-{{"{{key}}"}}">
+    <div class="search-hit-content">
+        <div class="search-hit-name">
+            {{ printf "<a href=\"%s\">%s</a>" "{{relpermalink}}" "{{title}}" | safeHTML }}
+            <div class="article-metadata search-hit-type">{{"{{type}}"}}</div>
+            <p class="search-hit-description">{{"{{snippet}}"}}</p>
+        </div>
+    </div>
+    </div>
+</script>
+{{ else if eq site.Params.search.engine 2 }}
+{{/* Algolia search result template. */}}
+{{"<!-- Search Algolia-->" | safeHTML }}
+<link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/@algolia/algoliasearch-netlify-frontend@1/dist/algoliasearchNetlify.css" />
+<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/@algolia/algoliasearch-netlify-frontend@1/dist/algoliasearchNetlify.js"></script>
+
+<script type="text/javascript">
+    algoliasearchNetlify({
+        appId: '{{site.Params.search.algolia.appId}}',
+        apiKey: '{{site.Params.search.algolia.apiKey}}',
+        siteId: '{{site.Params.search.algolia.siteId}}',
+        branch: '{{site.Params.search.algolia.branch}}',
+        selector: '{{site.Params.search.algolia.selector}}',
+        detached: false,
+    });
+</script>
+
+{{ partial "search/search-overlay" .}}
+
+{{end}}
+
+{{if $.Site.Data.gdpr.osana.active }}
+{{ "<!-- GDPR -->" | safeHTML }}
+<script src="{{$.Site.Data.gdpr.osana.script}}"></script>
+{{ "<!-- /GDPR -->" | safeHTML }}
+{{end}}
+
+{{ $script := .Site.Data.webpack.main }}
+{{ with $script.js }}
+<script rel="preload" as="script" src="{{ relURL . }}" async defer></script>
+{{ end }}
+
+{{/* Attempt to load local web-component files */}}
+{{ $webComponentScript := .Site.Data.webpack.other }}
+{{ "<!-- Web-components -->" | safeHTML }}
+{{ range $webComponentScript.js  }}
+    <script  rel="preload" as="script" src="{{ relURL . }}" async defer></script>
+{{ end }}
+{{ with $webComponentScript.css }}
+    <link rel="preload" as="style" rel="stylesheet" href="{{ relURL . }}">
+{{ end }}
+
+{{- if $.Site.Data.gdpr.osana.active -}}
+    {{ "<!-- GDPR -->" | safeHTML }}
+    <script src="{{$.Site.Data.gdpr.osana.script}}"></script>
+    {{ "<!-- /GDPR -->" | safeHTML }}
+{{- end -}}
+
+{{- if eq site.Params.google_translate true -}}
+    {{ "<!-- Google Translate -->" | safeHTML }}
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+{{- end -}}
+
+
+{{ "<!-- PWA -->" | safeHTML }}
+{{- if eq site.Params.enablePWA true -}}
+    {{- if eq hugo.Environment "production" -}}
+        {{- $stylesheet := .Site.Data.webpack.main -}}
+        {{ $script := .Site.Data.webpack.main }}
+        {{ $link := "sw.js" }}
+        {{ with $script.js }}
+            {{- $sw := resources.Get "sw.js" | js.Build (dict "params" (dict "css" $stylesheet.css "js" .)) | resources.Minify -}}
+            {{- $link = $sw.Permalink -}}
+
+            <script>
+                if('serviceWorker' in navigator) {
+                    window.addEventListener('load', function () {
+                        navigator.serviceWorker
+                            .register('{{$link}}', {scope: '/'})
+                            .then(function () {
+                                console.log('REGISTERED')
+                            });
+
+                        navigator.serviceWorker
+                            .ready
+                            .then(function () {
+                                console.log('REGISTERED Ready')
+                            });
+                    });
+                }
+            </script>
+        {{ end }}
+    {{- end -}}
+{{- end -}}
+

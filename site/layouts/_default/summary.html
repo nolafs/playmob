@@ -1,0 +1,61 @@
+{{$context := .}}
+{{$parentUrl := .Parent.Title | urlize }}
+{{$categories := .Param (printf "%s%s" (.Parent.Title | urlize ) "/categories") }}
+{{$tags := .Param (printf "%s%s" (.Parent.Title | urlize ) "/tags") }}
+<div class="card h-full bg-base-100 text-base-content shadow-xl">
+    {{if .Params.featured_image }}
+        {{with  .Params.featured_image }}
+            {{if .src }}
+                <a href="{{ $context.Permalink }}" >
+                <figure class="w-full h-full max-h-[225px]">
+                    {{ $resources := $context.Page.Resources.GetMatch  .src  }}
+                    {{ partial "util/image" (dict "context" $context "image" $resources "alt" .alt "option" "Fill" "size" "jpg 400x225 center" "baseSize" 400 "className" "max-w-none w-full h-full object-cover")}}
+                </figure>
+                </a>
+            {{else}}
+                {{ with $context.Site.Data.theme.placeholder_img }}
+                <figure class="w-full h-full max-h-[225px]">
+                    {{ partial "util/image-lfg" (dict "image" .  "width" "400" "height" "225" "classes" "w-full h-full object-cover" )}}
+                </figure>
+                {{end}}
+            {{end}}
+        {{end}}
+    {{else}}
+        {{ with $context.Site.Data.theme.placeholder_img }}
+        <figure class="w-full h-full max-h-[225px]">
+            {{ partial "util/image-lfg" (dict "image" .  "width" "400" "height" "225" "classes" "w-full h-full object-cover" )}}
+        </figure>
+        {{end}}
+    {{end}}
+    <div class="card-body flex flex-col">
+        <div class="flex justify-between uppercase font-bold text-primary">
+            <div>
+                {{range $categories}}
+                    <a href="/{{$parentUrl}}/categories/{{.}}" class="text-primary no-underline font-bold"><small>{{. | humanize}}</small></a>
+                {{ end }}
+            </div>
+            <div><small>{{partial "util/get_dates" . }}</small></div>
+        </div>
+        <div class="flex gap-x-2 my-1">
+            {{range $tags}}
+                <a href="/{{$parentUrl}}/tags/{{.}}" class="no-underline font-semibold bg-primary uppercase text-neutral-content rounded text-xs px-3 py-1 ">{{. | humanize}}</a>
+            {{ end }}
+        </div>
+        <h3 class="card-title leading-tight">
+            <a href="{{ .Permalink }}"  class="font-bold xl:text-2xl no-underline hover:text-primary">{{.Title}}</a>
+        </h3>
+        <p class="text-sm md:text-base xl:text-xl">{{ .Summary | truncate 120 }}</p>
+        {{if .Params.client }}
+            <span class="block h-16">
+                {{partial "util/get_client" (dict "client" .Params.client "details" false "classes" "h-full  w-auto")}}
+            </span>
+         {{else}}
+            {{if .Params.authors }}
+                    {{partial "util/get_authors" (dict "authors" .Params.authors "details" true "classes" "mask mask-circle w-full h-full object-contain")}}
+            {{end}}
+        {{end}}
+        <div class="w-full mt-4">
+            <a class="btn btn-block btn-secondary xl:btn-lg text-white" href="{{ .RelPermalink }}">{{- if .Params.summary_button -}}{{.Params.summary_button}}{{- else -}}Learn More{{- end -}}</a>
+        </div>
+    </div>
+</div>

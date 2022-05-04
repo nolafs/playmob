@@ -1,0 +1,43 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+{{$content := $global.Site.Data.clients }}
+<section id="section-{{$context.title | urlize }}">
+    <div class="layout-block relative flex flex-col items-center justify-center w-full
+        {{- if eq .styling.full false }} container mx-auto {{ end -}}
+        {{- if eq .styling.center true }} text-center {{ end -}}
+        {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+        {{- if .styling.background }} bg-cover bg-center {{ end -}}
+        {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+        {{- if .styling.textColor }} {{ .styling.textColor }} {{- else }} text-white {{ end -}}
+        {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+        {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+        "
+         {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+    >
+
+        {{ partial "blocks/components/comp-intro" . }}
+
+        <!-- scroller -->
+        {{$contentList := slice }}
+        {{range $content }}
+            {{if ne .active false }}
+                {{$contentList = $contentList | append . }}
+            {{end}}
+        {{end}}
+        {{$contentLen := len $contentList}}
+        <div class="relative w-full my-10 overflow-hidden" x-data="repeater({{$contentLen}})"   >
+            <div id="no01" class="wrapper relative h-[100px] w-[250%] overflow-hidden"   x-ref="container">
+                <div class="items h-[100px]">
+                {{range $index, $value := $contentList}}
+                    <div id="item-{{$index}}" class="item absolute p-3 h-[100px]">
+                        <img data-src="{{.logo}}" alt="{{.Title}}" class="lazyload object-contain w-full h-full">
+                    </div>
+                {{end}}
+                </div>
+            </div>
+        </div>
+    {{partial "blocks/components/comp-nav" . }}
+    </div>
+</section>
+{{end}}

@@ -1,0 +1,18 @@
+{{ define "header" }}
+    {{ partial "hero/hero" . }}
+{{ end }}
+{{ define "main" }}
+    {{ partial "featured" . }}
+    {{ .Render "content" }}
+    {{partial "taxonomy-menu" (dict "Context" . ) }}
+    <div class="container mx-auto {{if .Content }} pt-5 {{else}} pt-20 {{end}} pb-20 px-5">
+        <div id="archive" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {{ $paginator := .Paginate  .Pages  }}
+            {{ range $paginator.Pages }}
+                {{ .Render "summary" }}
+            {{ end }}
+        </div>
+        {{ partial "pagination.html" (dict "context" . "paginator" .Paginator )}}
+    </div>
+    {{ partial "blocks/block-layout.html" (dict "context" . "global" $)}}
+{{ end }}

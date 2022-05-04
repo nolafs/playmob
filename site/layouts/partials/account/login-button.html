@@ -1,0 +1,9 @@
+<div  x-data >
+  <button class="sm:btn-ghost md:btn lg:btn-lg  md:btn-outline" x-show="!$store.profile.isLoggedIn" @click="$dispatch('login-drawer')">
+    <span class="hidden md:block  whitespace-nowrap">Log in</span>
+    <span class="md:hidden"><i class="fa-regular fa-circle-user"></i></span>
+  </button>
+  <button x-show="$store.profile.isLoggedIn" @click="$dispatch('login-drawer')">
+    {{partial "account/avatar" (dict "size" "xsmall")}}
+  </button>
+</div>

@@ -1,0 +1,10 @@
+{{$title := (.Context.Title | urlize )}}
+{{$section := .Context.Site.GetPage "section" .Context.Section }}
+<div id="taxonomy-menu" class="w-full bg-base-200 py-10">
+    <div class="container mx-auto flex flex-wrap justify-center gap-2 px-5">
+        <a href="{{$section.FirstSection.RelPermalink}}" class="btn btn-secondary {{if eq .Context.RelPermalink ($section.FirstSection.RelPermalink) }} btn-active  {{end}}">All</a>
+        {{ range $key, $value := index .Context.Site.Taxonomies (printf "%s/categories" ( $section.FirstSection.Title | urlize ) ) -}}
+        <a href="{{.Page.RelPermalink}}"  class="btn btn-secondary {{if eq $title $key}} btn-active{{end}}">{{$key | humanize}}</a>
+        {{ end -}}
+    </div>
+</div>

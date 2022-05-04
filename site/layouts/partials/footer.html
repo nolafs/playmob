@@ -1,0 +1,115 @@
+{{ "<!-- Footer -->" | safeHTML }}
+{{ $current := . }}
+{{if eq .Site.Data.newsletter.newsletter_active true}}
+	{{partial "widgets/widget-newsletter" .}}
+{{end}}
+<footer>
+<div class="bg-neutral text-neutral-content">
+	<footer class="container mx-auto px-5 py-10 md:py-20 mx-auto footer text-center md:text-left justify-center md:justify-between" >
+		<div>
+			{{if gt (len site.Params.logo) 0}}
+			<a href="{{ site.BaseURL }}" rel="home" class="logo-main">
+				<img src="{{ site.Params.logo }}" alt="{{ site.Title | safeHTML }}"></a>
+			{{else}}
+				{{ if not ( len site.Data.theme.logo ) }}
+					<span class="text-lg font-bold font-title">
+							<a href="{{ site.BaseURL | absLangURL }}">
+								{{- site.Title | safeHTML -}}
+							</a>
+						</span>
+				{{ else }}
+					<a href="{{ site.BaseURL | absLangURL }}" class="flex justify-center md:justify-start md:p-1 w-full h-16 lg:h-20">
+						{{ $pathArr := split site.Data.theme.logo   "." }}
+						{{ $pathLen := len $pathArr }}
+						{{ $ext := index $pathArr (sub $pathLen 1) }}
+						{{ if eq $ext "svg" }}
+							{{  readFile (print "static" site.Data.theme.logo) | safeHTML }}
+						{{else}}
+							<img src="{{ site.Data.theme.logo }}" alt="{{ site.Title | safeHTML }}">
+						{{end}}
+
+					</a>
+				{{ end }}
+			{{end}}
+			{{- with .Site.Data.theme.footer_statement -}}
+			<div class="font-thin">
+				{{.}}
+			</div>
+			{{- end -}}
+			{{ partial "widgets/widget-social-links" .}}
+		</div>
+		<div class="flex flex-col md:flex-row w-full text-center justify-center md:text-left gap-4 md:gap-10">
+			{{- range .Site.Data.theme.footer_sections -}}
+			<div class="flex flex-col w-full">
+				<span class="font-bold mb-2">
+					{{if isset . "page"}}
+						{{$page := site.GetPage  "/" (.page | urlize  )}}
+						{{$link := $page.Permalink}}
+						{{$name := $page.Title}}
+						{{- if $link -}}
+							{{ $activeLink := true}}
+							<a href="{{ $link }}" class="{{ if $activeLink }}active{{ end }} whitespace-nowrap">
+								{{- $name -}}
+							</a>
+						{{- end -}}
+					{{else}}
+						{{- if .link -}}
+							{{- if .active -}}
+							{{ $activeLink := true}}
+							<a href="{{ .link }}" class="{{ if $activeLink }}active{{ end }} whitespace-nowrap">
+								{{- .section -}}
+							</a>
+							{{- end -}}
+						{{else}}
+							{{- .section -}}
+						{{- end -}}
+					{{- end -}}
+				</span>
+				{{- range $index, $content := .footer_section_links -}}
+
+					{{$draft := false}}
+					{{$link := $content.link}}
+					{{$name := $content.name }}
+					{{$active := $content.active }}
+
+					{{if isset . "page"}}
+						{{$page := $current.Site.GetPage  "/" (.page | urlize  )}}
+						{{$draft = $page.Params.draft }}
+						{{$link = $page.Permalink}}
+						{{$name = $page.Title}}
+					{{end}}
+					{{- if eq $draft false -}}
+						{{- if $active -}}
+						{{ $activeLink := true}}
+						<a href="{{ $link }}" class="whitespace-nowrap {{ if $activeLink }}active{{ end }}">
+							{{- $name -}}
+						</a>
+						{{- end -}}
+					{{- end -}}
+				{{- end -}}
+			</div>
+			{{- end -}}
+		</div>
+	</footer>
+</div>
+<div class="flex justify-center px-4 py-5  bg-base-100">
+	<div class="flex flex-col md:flex-row items-center md:justify-between w-full max-w-6xl">
+		<span class="md:flex-none copyright">
+			{{- if .Site.Data.theme.legal -}}
+				{{ replace .Site.Data.theme.legal "{year}" now.Year | safeHTML }}
+			{{- else -}}
+				{{ replace .Site.Copyright "{year}" now.Year | safeHTML }}
+			{{- end -}}
+		</span>
+		<div class="pt-5 md:pt-0 m md:flex-auto">
+			<div class="flex  flex-col md:flex-row text-center justify-center md:justify-end md:items-center gap-2 md:gap-8   md:w-full md:h-full">
+			{{ range (where .Site.RegularPages "Section" "legal")}}
+				<a href="{{.Permalink}}" class="btn-link text-secondary">
+					{{.Title}}
+				</a>
+			{{ end }}
+			</div>
+		</div>
+	</div>
+</div>
+</footer>

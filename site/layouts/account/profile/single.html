@@ -1,0 +1,18 @@
+{{ define "header" }}
+<div class="hero min-h-[30vh]" x-data>
+    <div class="hero-overlay bg-opacity-60"></div>
+    <div class="text-center hero-content text-neutral-content" >
+        <div class="max-w-md pt-40 pb-20">
+            {{partial "account/avatar" (dict "size" "large")}}
+            <h1 x-data class="p-4" x-text="$store.profile.getUserFullName().fullName"></h1>
+        </div>
+    </div>
+</div>
+{{ end }}
+{{ define "main" }}
+<div x-data>
+    <div class="prose mx-auto prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl pt-12 pl-12 pr-12 pb-24">
+        {{ .Content  }}
+    </div>
+</div>
+{{end}}

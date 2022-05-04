@@ -1,0 +1,102 @@
+# Change baseurl for sharing
+baseurl = "/"
+title = "Playmob"
+googleAnalytics = "UA-34719775-1"
+paginate = 6 # Number of items per page in paginated lists.
+#assetDir = "/site/assets"
+# Enter a copyright notice to display in the site footer.
+# To display a copyright symbol, type `&copy;`. For current year, type `{year}`.
+copyright = "&copy; {year} Playmob"
+
+[markup.goldmark.renderer]
+      unsafe= true
+
+############################
+## Language  ##
+############################
+defaultContentLanguage = "en"
+IsTranslated = false
+
+############################
+## Advanced options below ##
+############################
+summaryLength = 30
+enableEmoji = true
+footnotereturnlinkcontents = "<sup>^</sup>"
+ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[imaging]
+  resampleFilter = "lanczos"
+  quality = 90
+  anchor = "smart"  # Anchor for cropping. Options include Smart and Center.
+
+# See configuration options for more details:
+# https://gohugo.io/getting-started/configuration/#toml-configuration
+disableKinds = [ "admin", "taxonomyTerm", "taxonomy"]
+
+############################
+## Outputs ##
+############################
+[outputFormats]
+    [outputFormats.manifest]
+        name = "manifest"
+        baseName = "manifest"
+        mediaType = "application/json"
+        notAlternative = "true"
+    [outputFormats.browserconfig]
+        name = "browserconfig"
+        baseName = "browserconfig"
+        mediaType = "application/xml"
+        notAlternative = "true"
+[outputs]
+    home = ["HTML", "RSS", "MANIFEST", "BROWSERCONFIG"]
+
+# Taxonomies.
+pluralizeListTitles=false
+preserveTaxonomyNames=true
+[taxonomies]
+  author = "authors"
+  "case-study" = "case-studies/categories"
+  "case-study-tag" = "case-studies/tags"
+  news = "news/categories"
+  newstag = "news/tags"
+
+
+[permalinks]
+  authors = "/authors/:slug/"
+  "case-studies" = "/case-studies/:slug/"
+  "case-study-tags" = "/case-studies/tags/:slug/"
+  news = "/news/:year/:month/:slug/"
+  newstag = "/news/tags/:year/:month/:slug/"
+
+
+[sitemap]
+    changefreq = "weekly"
+    filename = "sitemap.xml"
+    priority = 0.5
+
+[related]
+    treshold = 1
+    includeNewer = true
+    toLower = false
+    [[related.indices]]
+        name = "case-studies/categories"
+        includeNewer = true
+        weight = 200
+    [[related.indices]]
+        name  = "case-studies/tags"
+        includeNewer = true
+        weight = 100
+    [[related.indices]]
+        name  = "client"
+        weight = 100
+    [[related.indices]]
+        name = "news/categories"
+        weight = 200
+    [[related.indices]]
+        name  = "news/tags"
+        weight = 100
+    [[related.indices]]
+        name  = "authors"
+        weight = 100
+

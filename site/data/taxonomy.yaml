@@ -1,0 +1,31 @@
+case-studies:
+  categories:
+    - name: Government
+      value: government
+    - name: NGO
+      value: ngo
+    - name: Corporate
+      value: corporate
+reports:
+  categories:
+    - name: Dummy1
+      value: dummy1
+    - name: Dummy2
+      value: dummy2
+news:
+  categories:
+    - name: Press
+      value: press
+    - name: "Announcement "
+      value: "announcement "
+    - name: Article
+      value: "article "
+    - name: Blog
+      value: blog
+    - name: Video
+      value: video
+tags:
+  - name: Game
+    value: game
+  - name: "Feature "
+    value: feature

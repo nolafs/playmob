@@ -1,0 +1,17 @@
+# Always allow login
+/account/login        /account/login  200
+
+# Always allow unauthorised
+/account/login    /account/login    200
+
+# Admin-only pages
+/admin/*    200!   Role=admin
+/admin/*    /account/login     401!
+
+# Admin-only pages
+/admin#/*    200!   Role=admin
+/admin#/*    /account/login     401!
+
+# All other pages
+/*    200!
+/*    /account/login    401!

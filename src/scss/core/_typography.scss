@@ -1,0 +1,49 @@
+h1{
+  strong{
+    @apply text-secondary underline decoration-secondary;
+  }
+}
+
+.prose.text-neutral-content {
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white;
+  }
+}
+
+.prose.md\:text-neutral-content {
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-white;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  em {
+    @apply not-italic text-info;
+  }
+}
+
+i{
+  svg{
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.fa-heart {
+  color: red !important;
+  fill: red !important;
+}
+
+#tweets {
+  a{
+    @apply text-info;
+  }
+
+  .interact {
+    @apply flex gap-2 mt-5;
+
+    a {
+      @apply btn btn-sm btn-secondary;
+    }
+  }
+}

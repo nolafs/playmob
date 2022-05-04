@@ -1,0 +1,193 @@
+/* angled div */
+.slanted-div {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.slanted{
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: -1;
+  top: 0;
+  transform-origin: left top;
+  transform: skewY(3deg);
+}
+
+.slanted-content {
+  line-height: 1.5;
+}
+
+
+.slanted-div-top {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+
+  &:after{
+    @extend .slanted;
+    bottom: 0;
+    transform-origin: left bottom;
+    transform: skewY(-3deg);
+  }
+
+  > div {
+    @extend .slanted-content;
+  }
+}
+
+.slanted-div-bottom {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+
+  @apply rounded-none mb-0;
+
+
+  &:before{
+    @extend .slanted;
+    @apply hidden md:block;
+  }
+}
+
+.slanted-div-reverse {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+
+  &:before{
+    @extend .slanted;
+    transform: skewY(-3deg);
+  }
+
+  &:after{
+    @extend .slanted;
+    bottom: 0;
+    transform-origin: left bottom;
+    transform: skewY(3deg);
+  }
+
+  > div {
+    @extend .slanted-content;
+  }
+}
+
+.slanted-div-top{
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* where the magic happens */
+.slanted-div:before, .slanted-div:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  z-index: -1;
+  top: 0;
+  transform-origin: left top;
+  transform: skewY(3deg);
+}
+
+.slanted-div:after {
+  bottom: 0;
+  transform-origin: left bottom;
+  transform: skewY(-3deg);
+}
+
+/* displays the content inside, as these settings in the parent breaks the effect */
+.slanted-div > div {
+  //text-align: center;
+  //font-size: 1.5em;
+  //line-height: 1.5;
+}
+
+
+.bg-blur-color {
+  background-color: #ffffff;
+  background-image:
+          radial-gradient(at 10% 20%, hsl(340.47, 89%, 48%) 0, transparent 50%),
+          radial-gradient(at 80% 60%, hsl(218.52, 40%, 55.00000000000001%) 0, transparent 50%);
+}
+
+/* Glassmorphism card effect */
+.content-blur-color{
+  backdrop-filter: blur(14px) saturate(80%);
+  -webkit-backdrop-filter: blur(14px) saturate(80%);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+
+[data-theme="playmob"] {
+  .g-bg-blue-white {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 40%, rgba(7, 2, 61, 1) 40%, rgba(7, 2, 61, 1) 100%);
+  }
+
+  .g-bg-blue-light-white {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 40%, rgba(#e6f7fd, 1) 40%, rgba(#e6f7fd, 1) 100%);
+  }
+}
+
+[data-theme="dark"] {
+  .g-bg-blue-white {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(#121212, 1) 0%, rgba(#121212, 1) 40%, rgba(7, 2, 61, 1) 40%, rgba(7, 2, 61, 1) 100%);
+  }
+
+  .g-bg-blue-light-white {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(#121212, 1) 0%, rgba(#121212, 1) 40%, rgba(#1d1480, 1) 40%, rgba(#1d1480, 1) 100%);
+  }
+}
+
+#section-contact-pusher {
+  p:first-of-type {
+    margin-bottom: 0 !important;
+    margin-top: 0;
+  }
+
+  h2:first-of-type, h1:first-child {
+    @apply mt-5
+  }
+
+  img{
+    display: inline-block;
+    margin: 0;
+  }
+}
+
+.block-content{
+  h1, h2, h3, h4, h6 {
+    @apply leading-tight mb-5 #{!important};
+  }
+}
+
+.block-columns {
+  .header-text-primary {
+    h1, h2, h3, h4, h6 {
+      @apply text-primary #{!important};
+    }
+  }
+  .header-text-secondary {
+    h1, h2, h3, h4, h6 {
+      @apply text-secondary #{!important};
+    }
+  }
+  .header-text-base {
+    h1, h2, h3, h4, h6 {
+      @apply text-base #{!important};
+    }
+  }
+
+  p {
+    @apply leading-tight;
+  }
+}
+

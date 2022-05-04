@@ -1,0 +1,28 @@
+{{- if ne .Site.Params.search.engine 0 -}}
+<div id="search-overlay" class="fixed z-50 inset-0 transform translate-y-full bg-neutral bg-opacity-90" x-data="$store.searchSetup" >
+    <div class="grid justify-items-end">
+        <div class="p-4">
+            <button class="btn btn-ghost text-white" @click="toggle()">
+                <i class="text-white fas fa-times fa-2x"></i>
+            </button>
+        </div>
+    </div>
+    <div class="container mx-auto">
+        <div class="grid w-full p-5 md:p-16">
+            <h1 class="text-xl md:text-5xl font-extrabold pb-3 md:pb-6 text-white"><i class="fas fa-search pr-3"></i>Search</h1>
+            {{- if eq .Site.Params.search.engine 1 -}}
+                <div  class="form-control">
+                    <div class="relative">
+                        <input type="text" placeholder="Search" class="w-full pr-16 input input-primary input-bordered">
+                        <button class="absolute top-0 right-0 rounded-l-none btn btn-primary">go</button>
+                    </div>
+                </div>
+            {{- end -}}
+            {{- if eq .Site.Params.search.engine 2 -}}
+            <div id="search" class="form-control">
+            </div>
+            {{- end -}}
+        </div>
+    </div>
+</div>
+{{- end -}}

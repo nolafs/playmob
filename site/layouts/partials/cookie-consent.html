@@ -1,0 +1,20 @@
+{{ with site.Data.gdpr.consent }}
+<script>
+     window.enableCookies = function(enable){
+      window['ga-disable-{{site.Params.marketing.google_analytics}}'] = enable;
+     }
+    window.consentVars = {
+         type: "{{.type}}",
+         domain: '{{.Site.BaseURL}}',
+         message: '{{ .message }}',
+         dismiss: '{{ .dismiss }}',
+         link: '{{ .link }}',
+         href: "{{ .url | absURL}}",
+         pbg: "{{ .p_bg }}",
+         ptxt: "{{ .p_txt }}",
+         bbg: "{{ .b_bg }}",
+         btxt: "{{ .b_txt }}"
+
+    }
+</script>
+{{end}}

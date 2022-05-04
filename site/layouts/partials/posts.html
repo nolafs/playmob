@@ -1,0 +1,9 @@
+<div class="container mx-auto pt-12 pl-12 pr-12 pb-24">
+    <div class="grid grid-cols-1 gap-6">
+        {{ $paginator := .Paginate (where .Site.RegularPages "Type" "press") }}
+        {{ range $paginator.Pages }}
+            {{ .Render "summary" }}
+        {{ end }}
+    </div>
+    {{ partial "pagination.html" (dict "context" . "paginator" .Paginator )}}
+</div>

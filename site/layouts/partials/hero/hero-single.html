@@ -1,0 +1,103 @@
+{{ $.Scratch.Set "feature" false }}
+{{ if .Params.featured_image }}
+    {{ with .Params.featured_image }}
+        {{if .active }}
+            {{$.Scratch.Set "feature" true}}
+        {{end}}
+        {{if eq .active_title true }}
+            {{$.Scratch.Set "active_title" true}}
+        {{else}}
+            {{$.Scratch.Set "active_title" false}}
+        {{end}}
+    {{end}}
+{{else}}
+    {{$.Scratch.Set "active_title" true}}
+{{end}}
+{{$parentUrl := .Parent.Title | urlize }}
+{{$categories := .Param (printf "%s%s" (.Parent.Title | urlize ) "/categories") }}
+{{$tags := .Param (printf "%s%s" (.Parent.Title | urlize ) "/tags") }}
+{{$ctx := .}}
+
+<header class="header-single" x-data x-init="$store.navSetup.disableHideLogo = true">
+    <div class="hero container mx-auto">
+        <div class="w-full rounded-lg shadow-lg mt-10 mb-5 md:mb-24 overflow-hidden">
+
+            {{if eq ($.Scratch.Get "feature") true}}
+                {{ $alt := .Params.featured_image.alt}}
+                {{ $image := .Params.featured_image.src }}
+                {{ $default := .Resources.GetMatch $image}}
+                {{if $default }}
+                    {{ $imgSrcSet := slice }}
+                    {{ $sizes := slice "jpg 1536x530 Center" "jpg 1300x530 Center" "jpg 450x450 Center"}}
+                    {{ $context := .}}
+                    {{ range $index, $size:= $sizes }}
+                        {{with $context.Resources.GetMatch $image}}
+                                {{ $srcUrl := (printf  $size | .Crop ).RelPermalink }}
+                                {{ $w := index (split (index (split $size " ") 1 ) "x") 0 }}
+                                {{ $imgSrcSet = $imgSrcSet | append (printf "%s %sw" $srcUrl $w) }}
+                        {{end}}
+                    {{ end }}
+                    {{ $default :=  ($context.Resources.GetMatch $image) }}
+                    {{ $imgSrcSet = (delimit $imgSrcSet ",") }}
+
+
+                    <img class="lazyload w-full h-full max-w-full object-cover object-center" alt="{{ $alt }}"   data-size = "auto"
+                         data-src="{{ $default.RelPermalink }}" data-srcset="{{ $imgSrcSet }}"
+                    />
+                 {{else}}
+                    {{ with $ctx.Site.Data.theme.placeholder_img }}
+                        {{ partial "util/image-lfg" (dict "image" .  "width" "1300" "height" "530" "classes" "w-full h-full object-cover object-center" )}}
+                    {{end}}
+                {{end}}
+            {{end}}
+        </div>
+    </div>
+
+    <div id="sticky-container" class="relative prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl mx-auto">
+        <div class="flex justify-between uppercase font-bold text-primary">
+            <div>
+                {{range $categories}}
+                    <a href="/{{$parentUrl}}/categories/{{.}}" class="text-primary no-underline font-bold"><small>{{. | humanize}}</small></a>
+                {{ end }}
+            </div>
+            <div><small>{{partial "util/get_dates" . }}</small></div>
+        </div>
+        <div class="flex gap-x-2 my-4">
+            {{range $tags}}
+                <a href="/{{$parentUrl}}/tags/{{.}}" class="no-underline font-semibold bg-info uppercase text-neutral-content rounded text-xs px-3 py-1 ">{{. | humanize}}</a>
+            {{ end }}
+        </div>
+         <div>
+            {{if eq ($.Scratch.Get "active_title") true}}
+                <h1>{{.Title}}</h1>
+            {{ end }}
+         </div>
+         {{if .Params.client }}
+          <div  class="no-prose">
+            <div class="flex flex-col md:flex-row gap-4 md:justify-between md:items-center mb-10">
+                <div>
+                    <span class="block w-full max-w-[80px] md:max-w-[100px] not-prose">
+                    {{partial "util/get_client" (dict "client" .Params.client )}}
+                    </span>
+                </div>
+                <div>
+                    {{if .Params.download}}
+                        {{partial "util/download_form" (dict "download" .Params.download ) }}
+                    {{end}}
+                </div>
+            </div>
+          </div>
+         {{else}}
+             {{if .Params.authors }}
+                 <div class="not-prose block h-16 mb-6 md:mb-0">
+                     {{partial "util/get_authors" (dict "authors" .Params.authors "details" true "classes" "mask mask-circle w-full h-full object-contain")}}
+                 </div>
+             {{end}}
+         {{end }}
+         <div id="sticky" class="hidden md:block" x-data="sticky">
+             <div class="social">
+                {{partial "util/share" . }}
+             </div>
+         </div>
+    </div>
+</header>

@@ -1,0 +1,5 @@
+{{ if ne .Site.Params.search.engine 0}}
+    <button class="btn btn-square btn-ghost lg:text-xl lg:mr-5" x-data @click="$store.searchSetup.toggle()">
+        <i class="fas fa-search md:fa-lg"></i>
+    </button>
+{{end}}

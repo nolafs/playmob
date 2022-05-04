@@ -1,0 +1,54 @@
+{{ $alt := .alt }}
+{{ $image := .image }}
+{{ $imgSrc := "" }}
+{{ $className := .className}}
+
+{{ if eq .option "Fit"}}
+    {{ .context.Scratch.Set "image" ($image.Fit .size)  }}
+{{ else if eq .option "Fill"}}
+    {{ .context.Scratch.Set "image" ($image.Fill .size)  }}
+{{ else if eq .option "Crop"}}
+    {{ .context.Scratch.Set "image" ($image.Crop .size)  }}
+{{else}}
+    {{ .context.Scratch.Set "image" $image }}
+{{end}}
+
+{{ $imageProcessed:= .context.Scratch.Get "image" }}
+{{ $imgSrcSet := slice }}
+
+
+{{if not .option}}
+    {{ $landscapeWidth := slice 2500 1500 1000 }}
+    {{ $portraitWidths := slice 1500  1000 750 }}
+    {{ $widths := $landscapeWidth }}
+    {{ if gt $image.Height $image.Width }}
+        {{ $widths = $portraitWidths }}
+    {{ end }}
+    {{ range $widths }}
+        {{ $srcUrl := (printf "%dx" . | $imageProcessed.Resize).RelPermalink }}
+        {{ if eq $imgSrc "" }}{{ $imgSrc = $srcUrl }}{{ end }}
+        {{ $imgSrcSet = $imgSrcSet | append (printf "%s %dw" $srcUrl .) }}
+    {{ end }}
+{{else}}
+    {{ $sizes := slice (mul .baseSize 1) (mul .baseSize 2) (mul .baseSize 3)}}
+    {{ range $index, $size:= $sizes }}
+        {{ $srcUrl := (printf "%dx webp" $size | $imageProcessed.Resize).RelPermalink }}
+        {{ if eq $imgSrc "" }}{{ $imgSrc = $srcUrl }}{{ end }}
+        {{ $imgSrcSet = $imgSrcSet | append (printf "%s %dx" $srcUrl (add $index 1)) }}
+    {{ end }}
+{{end}}
+
+
+{{ $imgSrcSet = (delimit $imgSrcSet ",") }}
+
+{{ $attributes := slice }}
+{{ range $name, $value := .attrs }}
+{{ $attributes = $attributes | append (printf "%s=%q" $name $value) }}
+{{ end }}
+{{ $attributes = (delimit $attributes " ") }}
+
+<img class="lazyload {{$className}}" alt="{{ $alt }}" width="{{$imageProcessed.Width}}" height="{{$imageProcessed.Height}}"  data-size = "auto"
+     data-src="{{ ($imageProcessed).RelPermalink }}" data-srcset="{{ $imgSrcSet }}" {{ print $attributes | safeHTMLAttr }}
+/>
+
+

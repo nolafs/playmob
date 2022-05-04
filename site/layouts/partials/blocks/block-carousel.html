@@ -1,0 +1,30 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+    <section id="section-{{$context.title | urlize }}">
+        <div class="layout-block relative flex flex-col items-center justify-center w-full py-10 md:py-20
+        {{- if eq .styling.full false }} container mx-auto {{ end -}}
+        {{- if eq .styling.center true }} text-center {{ end -}}
+        {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+        {{- if .styling.background }} bg-cover bg-center {{ end -}}
+        {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+        {{- if .styling.textColor }} {{ .styling.textColor }} {{- else }} text-white {{ end -}}
+        {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+        {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+        "
+         {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+        >
+            {{if .styling.background}}
+            <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+            {{end}}
+            <div class="px-4">
+                {{ partial "blocks/components/comp-intro" . }}
+            </div>
+
+            {{ with . }}
+                {{ partial "widgets/widget-carousel" . }}
+            {{ end }}
+            {{partial "blocks/components/comp-nav" . }}
+        </div>
+    </section>
+{{end}}

@@ -1,0 +1,177 @@
+{{$context := site.Data.newsletter }}
+{{with $context}}
+    <div class="relative flex flex-col items-center justify-center w-full px-4 py-20  bg-cover bg-center {{.backgroundColor}} {{.textColor}} {{if .background}}text-white{{end}}"
+            {{if .background}} style="background-image: url('{{.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+    >
+        {{if .background}}
+            <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+        {{end}}
+        <div class="container mx-auto max-w-[1300px]">
+            <div class="card bg-neutral">
+                <div class="card-body">
+                    <div class="flex flex-col md:flex-row items-center gap-5 lg:gap-10">
+                        <div class="w-full md:w-6/12 prose prose-sm sm:prose-base lg:prose-lg xl:prose-xl 2xl:prose-2xl">
+                            <h3 class="text-xl md:text-lg {{.headerColor}}">{{.title}}</h3>
+                            {{ if .body }}
+                                <div class="mb-2 leading-tight no-prose {{.textColor}}">
+                                    {{.body | markdownify | safeHTML}}
+                                </div>
+                            {{end}}
+                        </div>
+                        <div class="w-full">
+
+                            <!-- Newsletter -->
+                            <form hidden name="newsletter"
+                                  method="POST"
+                                  data-netlify-honeypot="bot-field"
+                                  data-netlify="true">
+                                <input name="firstName">
+                                <input name="lastName">
+                                <input name="email">
+                                <input name="accept">
+                                <input name="form-name">
+                            </form>
+
+                            <div id="newsletter-form" x-data="{
+                                firstName : '',
+                                firstNameDirty: false,
+                                lastName : '',
+                                lastNameDirty: false,
+                                email: '',
+                                emailDirty: false,
+                                accept: true,
+                                result: 'start',
+                                isEmail (value) {return new RegExp('^\\S+@\\S+[\\.][0-9a-z]+$').test(String(value).toLowerCase())},
+                                submitMessage (firstName, lastName, email, accept) {
+
+                                    if (!firstName || firstName.length == 0 || !lastName || lastName.length == 0 || !email || !accept ) {
+                                        return;
+                                    }
+
+                                    let formElement = document.getElementById('form-newsletter-data');
+                                    let body = new URLSearchParams(new FormData(formElement)).toString();
+
+                                    this.result = 'sending';
+
+                                      return fetch('/', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                },
+                                                body: body,
+                                            })
+                                                .then((response) => {
+                                                    this.result = '';
+                                                    if (response.ok) {
+                                                        console.log('SUCCESS', response)
+                                                        formElement.reset();
+                                                        this.result = 'success'
+                                                    } else {
+                                                        console.log('ERROR', response)
+                                                        this.result = 'error'
+                                                    }
+                                                })
+                                                .catch((error) => console.error(error));
+                                                this.result = 'error'
+                                                    }
+                            }">
+                                <div :class="(result !== 'error' && result !== 'success') ? 'opacity-100': 'opacity-0'">
+                                    <form class="pb-2 flex flex-col justify-center items-center lg:flex-row gap-5"
+                                          class="form-control" id="form-newsletter-data"
+                                          x-on:submit.prevent="
+                                             firstNameDirty = true;
+                                             lastNameDirty = true;
+                                             emailDirty = true;
+                                            submitMessage(firstName, lastName, email, accept);"
+
+                                    >
+
+                                        <div class="w-full lg:w-8/12 flex flex-col gap-5">
+                                            <input type="hidden" name="form-name" value="newsletter"/>
+                                            <div class="space-y-5 md:space-y-0 md:columns-2 ">
+                                                <div>
+                                                    <!-- First Name -->
+                                                    <fieldset>
+                                                        <input class="input input-bordered  w-full" x-model="firstName" x-on:blur="firstNameDirty = true"
+                                                               type="text" id="firstName" name="firstName" placeholder="First Name">
+                                                        <p x-show.transition="firstNameDirty && firstName.length == 0" style="color: red" x-cloak>
+                                                            Please fill out your first name.
+                                                        </p>
+                                                    </fieldset>
+                                                </div>
+                                                <div>
+                                                    <!-- Last Name -->
+                                                    <fieldset>
+                                                        <input class="input input-bordered  w-full" x-model="lastName" x-on:blur="lastNameDirty = true"
+                                                               type="text" id="lastName" name="lastName" placeholder="Last Name">
+                                                        <p x-show.transition="lastNameDirty && lastName.length == 0" style="color: red" x-cloak>
+                                                            Please fill out your last name.
+                                                        </p>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <!-- Email -->
+                                            <fieldset>
+                                                <input x-model="email" x-on:blur="emailDirty = true"
+                                                       class="input input-bordered  w-full" type="email" id="email"
+                                                       name="email" placeholder="Email">
+                                                <p x-show.transition="emailDirty && !isEmail(email)" style="color: red"
+                                                   x-cloak>
+                                                    Please provide a valid email.
+                                                </p>
+                                            </fieldset>
+                                        </div>
+                                        <p hidden>
+                                            <label>ignore: <input name="bot-field"/></label>
+                                        </p>
+                                        <div class="w-full lg:w-4/12">
+                                            <button class="btn btn-block btn-secondary" type="submit">Submit
+                                            </button>
+                                            <div>
+                                                <fieldset>
+                                                    <label class="label cursor-pointer justify-start space-x-2 mt-3 mx-auto">
+                                                        <input type="checkbox" x-model="accept" id="accept"
+                                                               name="accept" checked="checked" class="checkbox">
+                                                        {{with (printf "legal/%s" ( .Site.Data.contact.privacy ))}}
+                                                            <span class="label-text text-neutral-content">I accept the <a
+                                                                        class="btn-link btn-secondary" href="{{.}}">Privacy Policy</a></span>
+                                                        {{end}}
+                                                    </label>
+                                                    <p x-show.transition="accept == false" style="color: red" x-cloak>
+                                                        Please accept our privacy policy.
+                                                    </p>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center p-5"
+                                     x-show="(result === 'error' || result === 'success' || result === 'sending')">
+                                    <div id="newsletter-thanks" x-show="result==='success'"
+                                         class="alert alert-success shadow-lg flex flex-col">
+                                        <p>Thanks!</p>
+                                        <button class="btn" @click="result=''">Continue</button>
+                                    </div>
+
+                                    <div id="newsletter-sending" x-show="result==='sending'"
+                                         class="alert alert-info shadow-lg flex flex-col">
+                                        <h4>Sending...</h4>
+                                        <p>Please wait, do not refresh the page.</p>
+                                    </div>
+
+                                    <div id="newsletter-error" x-show="result==='error'"
+                                         class="alert alert-error shadow-lg flex flex-col">
+                                        <h4>Error</h4>
+                                        <p>Oops, something went wrong. Please try again.</p>
+                                        <button class="btn" @click="result=''">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

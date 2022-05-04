@@ -1,0 +1,115 @@
+{{$context := .context }}
+{{$global := .global }}
+
+
+{{with $context}}
+    <section id="section-testimonials">
+        {{$global.Scratch.Set "testimonials"  $global.Site.Data.testimonials }}
+
+        {{if isset . "testimonials"}}
+            {{$t := slice }}
+            {{range ($global.Scratch.Get "testimonials") }}
+                {{$testimonial := . }}
+                {{range $context.testimonials}}
+                    {{if eq $testimonial.title .}}
+                        {{$t = $t | append $testimonial}}
+                    {{end}}
+                {{end}}
+            {{end}}
+
+            {{$global.Scratch.Set "testimonials" $t}}
+        {{end}}
+
+        <div class="relative flex flex-col items-center justify-center w-full{{if eq .style "carousel" }} px-0 {{else}} px-4 {{end}} py-10 md:py-20
+    {{- if eq .styling.full false }} container mx-auto {{ end -}}
+    {{- if eq .styling.center true }} text-center {{ end -}}
+    {{- if .styling.background }} bg-cover bg-center {{ end -}}
+    {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+    {{- if .styling.textColor}} {{ .styling.textColor -}} {{- else }} text-white {{ end -}}
+    {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+    {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+"
+
+                {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+        >
+            {{if .styling.background}}
+                <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+            {{end}}
+            {{ partial "blocks/components/comp-intro" . }}
+
+            {{if eq .style "carousel"}}
+
+                <div class="w-full carousel-wrapper relative overflow-hidden"  x-data="carousel" x-init="init(1)">
+                    <div class="w-full carousel carousel-center" x-ref="container">
+                        {{range $index, $content := $global.Scratch.Get "testimonials" }}
+                            <div id="item-{{$index}}" data-slide="{{$index}}" class="p-3 md:p-10 carousel-item transition ease-in-out" :class="($el.dataset['slide'] === currentIndex) ? 'opacity-100' : 'opacity-30'">
+                                <div class="{{if eq $context.styling.card true }}card md:card-side bg-base-100 text-base-content max-w-xs md:max-w-lg lg:max-w-4xl{{end}}">
+                                    <div class="md:w-1/2">
+                                        <figure class="w-full h-full min-h-[225px]">
+                                            {{if .image }}
+                                                {{ $resources := resources.Get (printf "images/%s" .image) }}
+                                                {{ partial "util/image" (dict "context" $global "image" $resources "alt" .Title "option" "Fill" "size" "jpg 540x332 center" "baseSize" 400 "className" "object-cover w-full h-full")}}
+                                            {{else}}
+                                                {{ with site.Data.theme.placeholder_img }}
+                                                    {{ partial "util/image-lfg" (dict "image" .   "width" "540" "height" "332" "classes" "object-cover w-full h-full")}}
+                                                {{end}}
+                                            {{end}}
+                                        </figure>
+                                    </div>
+                                    <div class="{{if eq $context.styling.card true }}card-body md:w-1/2 {{else}}p-5 text-center{{end}} flex flex-col h-full">
+                                        <div class="{{if ne $context.styling.card true }}text-base md:text-2xl lg:text-3xl{{else}} flex-grow text-sm md:text-md lg:text-xl {{end}}">
+                                            <div class="block w-full text-secondary text-3xl md:text-5xl"><i
+                                                        class="fa-solid fa-quote-right"></i></div>
+                                            {{.body}}
+                                        </div>
+                                        <div class="{{if eq $context.styling.card true }}card-actions justify-center items-center {{else}}flex flex-col md:flex-row mt-5 justify-center{{end}}">
+                                            {{if .client}}
+                                                <div class="company flex-shrink">
+                                                    <div class="block w-16 h-16 my-3 md:mb-0">
+                                                        {{partial "util/get_client" (dict "client" .client "details" false "classes" "mb-0 w-full h-full object-contain")}}
+                                                    </div>
+                                                </div>
+                                            {{end}}
+                                            <div class="flex-grow text-secondary text-sm md:text-md">
+                                                {{.title}} - {{.position}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {{end}}
+                    </div>
+
+                <div class="hidden md:flex justify-center w-full py-2 gap-2">
+                    {{range $index, $value := $global.Scratch.Get "testimonials" }}
+                        <button id="bt-{{$index}}" data-button="{{$index}}" @click="goToIndex" :class="($el.dataset['button'] === currentIndex) ? 'btn-secondary' : 'bg-base-100 border-white'"
+                                class="btn btn-circle btn-xs hover:bg-secondary hover:border-secondary"></button>
+                    {{end}}
+                </div>
+                </div>
+            {{end}}
+            {{if eq .style "list"}}
+                {{range $index, $content := $global.Scratch.Get "testimonials" }}
+                    <div class="{{if eq $context.card true }}card glass{{end}} w-full {{if eq $context.grid 1}} {{if eq $context.card true }}lg:card-side{{end}}{{end}}text-content">
+                        <div class="{{if eq $context.card true }}card-body max-w-md{{else}}p-5 text-center max-w-5xl mx-auto{{end}}">
+                            <div class="{{if ne $context.card true }}text-xl md:text-2xl lg:text-3xl{{end}}">{{.Content}}</div>
+                            <div class="{{if eq $context.card true }}card-actions justify-start{{else}}flex flex-col mt-5 justify-center{{end}}">
+                                <div class="avatar justify-center">
+                                    <div class="rounded-full w-16 h-16">
+                                        {{ $resources := .Page.Resources.GetMatch  .Params.profile   }}
+                                        {{ partial "util/image" (dict "context" . "image" $resources "alt" .Title "option" "Fill" "size" "100x100 center" "baseSize" 100)}}
+                                    </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-bold">{{.Title}}</span>
+                                    <span class="text-sm opacity-50">{{.Params.position}}</span>
+                                    <span class="text-sm opacity-50">{{.Params.company}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
+    </section>
+{{end}}

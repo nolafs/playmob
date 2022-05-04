@@ -1,0 +1,118 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+    {{$max := .max}}
+    {{$shadow := .shadow}}
+    {{$carousel:= .carousel}}
+    {{$cardStyle := .card_style}}
+    {{$content := first $max (where $global.Site.RegularPages.ByWeight "Section" .contentType) }}
+    <section id="section-{{$context.title | urlize }}">
+        <div class="layout-block relative flex flex-col items-center justify-center w-full {{if eq $carousel  true }} pl-0 {{else}} px-4 {{end}} py-10 md:py-20
+        {{- if eq .styling.full false }} container mx-auto {{ end -}}
+        {{- if eq .styling.center true }} text-center {{ end -}}
+        {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+        {{- if .styling.background }} bg-cover bg-center {{ end -}}
+        {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+        {{- if .styling.textColor }} {{ .styling.textColor }} {{- else }} text-white {{ end -}}
+        {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+        {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+        "
+                {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+        >
+
+
+            {{if eq $carousel  true }}
+
+            <!-- carousel -->
+            <div class="container mx-auto">
+                <div class="flex flex-col md:flex-row w-full md:space-x-10">
+                    <div class="container mx-auto md:w-4/12 mb-10 md:mb-0 text-center md:text-left">
+                        {{partial "blocks/components/comp-intro" . }}
+                        {{partial "blocks/components/comp-nav" . }}
+                    </div>
+                    <div class="w-full md:w-8/12">
+                        <div class="relative overflow-hidden  {{if .navigation.button }}pb-0{{else}}p-16{{end}}"
+                             x-data="carousel()" x-init="init()">
+                            <div class="carousel-wrapper relative">
+                            <div class="carousel md:gap-x-4" x-ref="container">
+                                {{range $index, $value := $content}}
+                                    <div id="item-{{$index}}" data-slide="{{$index}}" class="carousel-item w-11/12 md:w-full">
+                                        <div class="card w-full bg-base-100 mx-2 first:ml-4 first:mr-2 md:first:ml-0 md:first:mr-0  text-base-content {{if eq $shadow true}} shadow-lg{{end}} {{if $cardStyle}}{{$cardStyle}}{{end}}">
+
+                                            {{ partial "blocks/components/comp-card-image" (dict "content" . "context" $context "size" "853x400" "classes" "max-h-[400px]")}}
+
+                                            <div class="card-body w-full flex flex-col md:flex-row  justify-between md:text-left">
+                                                <div>
+                                                    <h3 class="card-title leading-tight mb-0">
+                                                        <a href="{{ .Permalink }}"
+                                                           class="text-xl mb:text-2xl lg:text-3xl font-bold no-underline text-secondary hover:text-primary">{{.Title}}</a>
+                                                    </h3>
+                                                    <p>{{if .Description}}{{.Description | truncate 100 }}{{else}}{{.Summary | truncate 100 }}{{end}}</p>
+                                                </div>
+
+                                                <div class="justify-end card-actions">
+                                                    <a class="btn  md:btn-lg btn-secondary"
+                                                       href="{{ .RelPermalink }}">Learn more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{end}}
+                            </div>
+                            <div @click="scrollTo(prev)" :class="(prev !== null) ? '' : 'opacity-20'" class="hidden md:flex absolute top-1/2 left-5 -translate-y-1/2 transition-none">
+                                 <button class="btn bg-base-100 border-white text-secondary">
+                                     <i class="fa-solid fa-arrow-left lg:fa-xl"></i></button>
+                            </div>
+                            <div @click="scrollTo(next)" :class="(next !== null) ? '' : 'opacity-20'" class="hidden md:flex absolute top-1/2  right-5 -translate-y-1/2 transition-none">
+                                 <button class="btn bg-base-100 border-white text-secondary ">
+                                     <i class="fa-solid fa-arrow-right lg:fa-xl"></i></button>
+                            </div>
+                            </div>
+                            <div class="hidden md:flex justify-center w-full py-2 gap-2 mt-5">
+                                {{range $index, $value := $content}}
+                                    <button id="bt-{{$index}}" data-button="{{$index}}" @click="goToIndex" :class="($el.dataset['button'] === currentIndex) ? 'btn-secondary' : 'bg-base-100 border-white'"
+                                            class="btn btn-circle btn-xs hover:bg-secondary hover:border-secondary"></button>
+                                {{end}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            {{ partial "blocks/components/comp-intro" . }}
+            <div class="container {{if eq $shadow true}} py-6 {{end}} mx-auto grid grid-cols-1 md:grid-cols-{{$max}} gap-4">
+                {{range $index, $value := $content}}
+                    <div class="card bg-base-100 {{if eq $context.grid 1}}lg:card-side {{end}}text-base-content {{if eq $shadow true}} shadow-xl{{end}} {{if $cardStyle}}{{$cardStyle}}{{end}}">
+                        {{$ctx := .}}
+                        {{with  .Params.featured_image }}
+                            {{if .src }}
+                                <figure>
+                                    {{ $resources := $ctx.Page.Resources.GetMatch  .src  }}
+                                    {{ partial "util/image" (dict "context" $ctx "image" $resources "alt" .alt "option" "Fill" "size" "400x250 center" "baseSize" 400)}}
+                                </figure>
+                            {{end}}
+                        {{end}}
+
+                        <div class="card-body h-full flex flex-col text-left">
+                            <h2 class="mb-0 card-title leading-tight text-center md:text-left">
+                                <a href="{{ .Permalink }}"
+                                   class="text-xl font-bold no-underline hover:text-primary">{{.Title}}</a>
+                            </h2>
+                            <small class="w-full text-center md:text-left opacity-40">{{ partial "util/get_dates" . }}</small>
+                            <p class="text-sm md:text-base">{{ .Summary | truncate 120 }}</p>
+                            <div class="justify-end card-actions">
+                                <a class="btn btn-circle btn-sm md:btn-lg btn-primary text-white"
+                                   href="{{ .RelPermalink }}"><i
+                                            class="fa-thin fa-chevron-right h-4 w-4  md:h-6 md:w-6"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+        {{partial "blocks/components/comp-nav" . }}
+        {{end}}
+
+        </div>
+    </section>
+{{end}}

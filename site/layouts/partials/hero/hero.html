@@ -1,0 +1,63 @@
+{{ $.Scratch.Set "feature" false }}
+{{ if .Params.featured_image }}
+    {{ with .Params.featured_image }}
+        {{if .active }}
+            {{$.Scratch.Set "feature" true}}
+        {{end}}
+        {{if eq .active_title true }}
+            {{$.Scratch.Set "active_title" true}}
+        {{else}}
+            {{$.Scratch.Set "active_title" false}}
+        {{end}}
+    {{end}}
+{{else}}
+    {{$.Scratch.Set "active_title" true}}
+{{end}}
+
+<div x-data x-init="$store.navSetup.disableHideLogo = true" class="hero relative  {{ if .Params.height }}
+        {{- if eq .Params.height "30vh" -}}
+            h-[30vh]
+        {{- end -}}
+        {{- if eq .Params.height "50vh" -}}
+            h-[50vh]
+        {{- end -}}
+        {{- if eq .Params.height "75vh" -}}
+            h-[75vh]
+        {{- end -}}
+        {{- if eq .Params.height "100vh" -}}
+            h-full
+        {{- end -}}{{end}} max-h-full bg-neutral text-primary-content bg-cover bg-center"
+        {{if eq ($.Scratch.Get "feature") true}}
+            {{if .Params.featured_image.src}}
+                style="background-image: url('{{ .Params.featured_image.src }}?nf_resize=smartcrop&w=1920&h=720')"
+            {{end}}
+        {{end}}>
+        {{if eq ($.Scratch.Get "feature") true}}
+            {{if eq ($.Scratch.Get "active_title") true}}
+                {{if .Params.featured_image.src}}
+                <div class="hero-overlay bg-opacity-60"></div>
+                {{ end }}
+            {{end}}
+        {{end}}
+    {{if eq ($.Scratch.Get "active_title") true}}
+            {{if .IsSection }}
+            <div class="container mx-auto text-neutral-content pt-20 md:pt-36 px-5">
+                <h1 class="mb-2 md:mb-5 text-2xl md:text-4xl  md:text-5xl font-semibold tracking-wide capitalize">
+                    {{- .Title | humanize -}}
+                </h1>
+                {{if .Params.subtitle}}
+                <p>
+                    {{- .Params.subtitle -}}
+                </p>
+                {{end}}
+            </div>
+            {{else}}
+            <div class="container mx-auto w-full text-neutral-content pt-24 md:pt-36  px-5">
+                <h1 class="mb-2 md:mb-5 text-2xl md:text-4xl  md:text-5xl font-semibold tracking-wide capitalize">
+                    <small class="text-sm">{{ (.CurrentSection ).Title }}</small>
+                    <span class="block">{{.Title | humanize}}</span>
+                </h1>
+            </div>
+            {{end}}
+ {{end}}
+</div>

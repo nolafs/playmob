@@ -1,0 +1,9 @@
+{{if .Site.Taxonomies}}
+{{ if ne (len .Site.Taxonomies.taxonomy) 0 }}
+        {{range $name, $taxonomy := .Site.Taxonomies.taxonomy }}
+        <a href="{{ "/category/" | relURL }}{{ $name | urlize }}" class="btn btn-ghost btn-sm rounded-btn">
+            {{$name}}
+        </a>
+        {{end}}
+{{ end }}
+{{end}}

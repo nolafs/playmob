@@ -1,0 +1,39 @@
+{{ $shadow :=  false }}
+{{ $max := 3 }}
+{{$section := (.CurrentSection.Title | urlize ) }}
+{{if $section }}
+    {{$cat := printf "%s/categories" $section}}
+    {{$tag := printf "%s/tags" $section}}
+
+    {{if .Params.hasRelations }}
+            {{$relation := (site.RegularPages.RelatedIndices .  $cat $tag) | first $max }}
+            {{ $len := len $relation }}
+            {{if ne $len 0}}
+                <section id="section-related">
+                    <div class="layout-block relative flex flex-col items-center w-full pl-0 py-20 bg-primary">
+                        <div class="container mx-auto w-full font-bold text-3xl  md:text-4xl lg:text-5xl mb-10 text-neutral-content px-5">
+                            {{if .Parent }}
+                                {{with .Parent }}
+                                    <h1>Related {{.Params.title}}</h1>
+                                {{end}}
+                            {{end}}
+                        </div>
+
+                        <div class="relative container w-full mx-auto overflow-hidden group">
+                            <div class="carousel justify-items-stretch  min-h-[150px]  {{if eq $shadow true}} pb-5 {{end}}"
+                                 x-ref="container">
+                                {{range $index, $value := $relation}}
+                                    <div id="item{{$index}}" class="carousel-item w-11/12 md:w-1/2 lg:w-1/{{$max}}">
+                                        <div class="mx-2 first:ml-4 first:mr-2">
+                                            {{ .Render "summary" }}
+                                        </div>
+                                    </div>
+                                {{end}}
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            {{end}}
+        {{end}}
+    {{end}}

@@ -1,0 +1,7 @@
+{{$type := .Get 0 }}
+<div class="alert {{if $type }} alert-{{ $type }} {{end}} shadow-lg">
+    <div>
+
+        <span>{{ .Inner | .Page.RenderString }}</span>
+    </div>
+</div>

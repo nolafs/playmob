@@ -1,0 +1,16 @@
+{{if .navigation.button }}
+<div class="z-10 mt-5">
+    <a class="btn btn-secondary  md:btn-lg" href="
+        {{- if .navigation.url -}}
+            {{- .navigation.url -}}
+        {{- else -}}
+        {{$.Site.GetPage ( . | urlize)}}
+            {{- with .navigation.collection_content -}}
+                {{- with site.GetPage ( . | urlize) -}}
+                    {{.Permalink}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}">{{.navigation.button}}
+    </a>
+</div>
+{{end}}

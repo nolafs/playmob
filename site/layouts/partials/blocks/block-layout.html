@@ -1,0 +1,50 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context.Params.sections }}
+    {{range .}}
+        {{if eq .active true}}
+            {{if eq .type "block_section"}}
+                {{if .active}}
+                    {{ partial "blocks/block-section"  (dict "context" . "global" $global ) }}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_list"}}
+                {{if .active}}
+                    {{ partial "blocks/block-list"  (dict "context" . "global" $global )}}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_testimonials"}}
+                {{if .active}}
+                    {{ partial "blocks/block-testimonials"  (dict "context" . "global" $global )}}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_video"}}
+                {{if .active}}
+                    {{ partial "blocks/block-videoplayer"  (dict "context" . "global" $global )}}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_newsletter"}}
+                {{if .active}}
+                    {{ partial "blocks/block-newsletter"  (dict "context" . "global" $global )}}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_carousel"}}
+                {{if .active}}
+                    {{ partial "blocks/block-carousel"  (dict "context" . "global" $global )}}
+                {{end}}
+            {{end}}
+            {{if eq .type "block_contact"}}
+                {{ partial "blocks/block-contact"  (dict "context" . "global" $global )}}
+            {{end}}
+            {{if eq .type "block_client_list"}}
+                {{ partial "blocks/block-client-list"  (dict "context" . "global" $global )}}
+            {{end}}
+            {{if eq .type "block_section_col"}}
+                {{ partial "blocks/block-section-col"  (dict "context" . "global" $global )}}
+            {{end}}
+            {{if eq .type "block_section_svg_anim"}}
+                {{ partial "blocks/block-section-svg-animation"  (dict "context" . "global" $global )}}
+            {{end}}
+        {{end}}
+    {{end}}
+{{end}}

@@ -1,0 +1,133 @@
+<!-- Mobile Nav -->
+{{ $url := trim .Context.Permalink "/"}}
+{{ $version := .Version }}
+{{ $current := .Context }}
+
+<div for="drawer-nav" class="drawer-overlay" ></div>
+<div id="navigation-mobile" x-data="$store.navSetup" >
+    <div
+           x-show="isOpen"
+           class="w-full max-w-[100%] h-screen overflow-auto inset-0 bg-base-100 text-base-content  lg:hidden">
+        <div class="py-2 flex justify-between  items-center border-b border-b-base-200">
+            <div class="w-1/2">
+            {{if gt (len site.Params.logo) 0}}
+            <a href="{{ .Context.Site.BaseURL }}" rel="home" class="logo-main">
+                <img src="{{ site.Params.logo }}" alt="{{ site.Title | safeHTML }}"></a>
+            {{else}}
+            {{ if not ( len .Context.Site.Data.theme.logo ) }}
+            <span class="text-lg font-bold">
+                    <a href="{{ .Context.Site.BaseURL | absLangURL }}">
+                        {{- .Context.Site.Title | safeHTML -}}
+                    </a>
+                </span>
+            {{ else }}
+            <a href="{{ .Context.Site.BaseURL | absLangURL }}" class="flex p-2 h-16">
+                <img src="{{ .Context.Site.Data.theme.logo }}" alt="{{ .Context.Site.Title | safeHTML }}">
+            </a>
+            {{ end }}
+            {{end}}
+            </div>
+            <div>
+                <button class="btn btn-ghost" @click="toggle()"> <i class="swap-on fas fa-times fa-xl" ></i></button>
+
+            </div>
+        </div>
+        <nav
+                aria-label="Options"
+                class="grid grid-cols-1"
+        >
+            <div class="">
+
+                {{ if not (.Context.Site.Data.theme.cms_navbar) }}
+                    {{ $current := .Context }}
+                    {{ range site.Menus.navbar }}
+                    {{ $active := or ($current.IsMenuCurrent "navbar" .) ($current.HasMenuCurrent "navbar" .) }}
+                    {{ $active = or $active (eq .Name $current.Title) }}
+                    <div class="{{ if ($active) }}bordered{{else}}hover-bordered{{ end }}">
+                        <a href="{{ .URL }}" @click="toggle()">
+                            {{- .Name -}}
+                        </a>
+                    </div>
+                    {{ end }}
+                {{ else }}
+                    {{if not ($.site.data.theme.active) }}
+                        {{if (.Context.Site.Data.theme.active) }}
+                            {{- range $index, $content := .Context.Site.Data.theme.items -}}
+                                {{$draft := false}}
+                                {{$link := $content.link}}
+                                {{$name := $content.name }}
+                                {{$active := $content.active }}
+
+                                {{if isset . "page"}}
+                                    {{$page := $current.Site.GetPage  "/" (.page | urlize  )}}
+                                    {{$draft = $page.Params.draft }}
+                                    {{$link = $page.Permalink}}
+                                    {{$name = $page.Title}}
+                                {{end}}
+                                {{- if eq $draft false -}}
+                                {{- if $active -}}
+                                    {{ $activeLink := (eq  ($name | urlize)  ($current.Page.Title | urlize))  }}
+
+                                    {{range $content.items}}
+                                        {{if (eq (.name | urlize)  ($current.Page.Title | urlize  )) }}
+                                            {{$activeLink = true}}
+                                        {{end}}
+                                    {{end}}
+                                    {{if $current.Page.Parent }}
+                                        {{ $activeLink := or (eq $name  $current.Page.Title) (eq $name  $current.Page.Parent.Title)  }}
+                                    {{end}}
+                                    <div tabindex="{{$index}}" class="collapse {{ if $content.items -}}collapse-arrow {{end -}} {{- if ($activeLink) -}} {{- if $content.items -}}collapse-open {{end -}}{{ end }}">
+                                        {{ if $content.items -}}<input type="checkbox">{{end}}
+                                        {{if $link }}
+                                            <a class="collapse-title border-b border-b-base-200" href="{{ $link }}" @click="toggle()">
+                                                {{- $name -}}
+                                            </a>
+                                        {{else}}
+                                            <div class="collapse-title border-b border-b-base-200 {{if $activeLink}} text-secondary {{end}} ">
+                                                {{- $name -}}
+                                            </div>
+                                        {{end}}
+                                        {{with $content.items}}
+
+                                                <div class="collapse-content border-b border-b-base-200">
+                                                    <div class="flex flex-col gap-4 pt-4">
+                                                    {{range $content.items}}
+                                                        {{$draftSub := false}}
+                                                        {{$linkSub := .link}}
+                                                        {{$nameSub := .name }}
+                                                        {{$activeSub := .active }}
+                                                        {{if isset . "page"}}
+                                                            {{$pageSub := $current.Site.GetPage  "/" ( .page | urlize  )}}
+                                                            {{$linkSub = $pageSub.Permalink}}
+                                                            {{$nameSub = $pageSub.Title}}
+                                                        {{end}}
+                                                        {{- if eq $draftSub false -}}
+                                                            {{- if $activeSub -}}
+                                                                {{ $activeLinkSub := (eq ($nameSub | urlize )  ($current.Page.Title | urlize)) }}
+                                                                <div><a href="{{ $linkSub }}"
+                                                                       class="text-black  {{if $activeLinkSub}} text-secondary {{end}} active:text-secondary-content" @click="toggle()">{{ $nameSub }}</a>
+                                                                </div>
+                                                            {{- end -}}
+                                                        {{- end -}}
+                                                    {{- end -}}
+                                                    </div>
+                                                </div>
+                                        {{end}}
+                                    </div>
+                                {{- end -}}
+                            {{- end -}}
+                        {{- end -}}
+                    {{end}}
+                    {{ else }}
+                        {{- range where .Context.Site.Pages  "Kind" "page" -}}
+                            {{ $activeLink := (eq .Title  $current.Page.Title) }}
+                            <a href="{{ .Permalink }}" class="btn btn-ghost btn-sm rounded-btn {{ if $activeLink }}btn-active{{ end }}">
+                                {{- .Title -}}
+                            </a>
+                        {{- end -}}
+                    {{- end -}}
+                {{- end -}}
+            </div>
+        </nav>
+    </div>
+</div>

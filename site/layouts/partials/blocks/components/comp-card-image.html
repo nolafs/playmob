@@ -1,0 +1,32 @@
+{{$content := .content }}
+{{$context := .content }}
+{{$size := .size | default "400x225"}}
+{{$width := index (split $size "x") 0}}
+{{$height := index (split $size "x") 1}}
+{{$classes := .classes | default "max-h-[225px]"}}
+{{with $content }}
+    {{if .Params.featured_image }}
+        {{with  .Params.featured_image }}
+            {{if .src }}
+                <a href="{{ $context.Permalink }}" >
+                    <figure class="w-full h-full {{$classes}}">
+                        {{ $resources := $context.Page.Resources.GetMatch  .src  }}
+                        {{ partial "util/image" (dict "context" $context "image" $resources "alt" .alt "option" "Fill" "size" (printf "%s center" $size) "baseSize" (int $width ) "className" "max-w-none w-full h-full object-cover")}}
+                    </figure>
+                </a>
+            {{else}}
+                {{ with $context.Site.Data.theme.placeholder_img }}
+                    <figure class="w-full h-full {{$classes}}">
+                        {{ partial "util/image-lfg" (dict "image" .  "width" $width "height" $height "classes" "w-full h-full object-cover" )}}
+                    </figure>
+                {{end}}
+            {{end}}
+        {{end}}
+    {{else}}
+        {{ with $context.Site.Data.theme.placeholder_img }}
+            <figure class="w-full h-full {{$classes}}">
+                {{ partial "util/image-lfg" (dict "image" .  "width" $width "height" $height "classes" "w-full h-full object-cover" )}}
+            </figure>
+        {{end}}
+    {{end}}
+{{end}}

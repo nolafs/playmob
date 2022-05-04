@@ -1,0 +1,15 @@
+.contact{
+  h1,h2,h3{
+    @apply text-neutral #{!important};
+
+    @apply mb-1 #{!important};
+
+    @screen sm {
+      @apply text-neutral #{!important};
+    }
+
+    @screen md {
+      @apply text-neutral-content #{!important};
+    }
+  }
+}

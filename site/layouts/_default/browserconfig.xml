@@ -1,0 +1,19 @@
+{{- if .Site.Data.theme.favicon -}}
+<browserconfig>
+  <msapplication>
+    <tile>
+      <square150x150logo src="{{.Site.Data.theme.favicon}}?nf_resize=fit&w=150&h=150"/>
+      <TileColor>#ff4401</TileColor>
+    </tile>
+  </msapplication>
+</browserconfig>
+{{- else -}}
+<browserconfig>
+<msapplication>
+  <tile>
+    <square150x150logo src="/img/mstile-150x150.png"/>
+    <TileColor>#ff4401</TileColor>
+  </tile>
+</msapplication>
+</browserconfig>
+{{- end -}}

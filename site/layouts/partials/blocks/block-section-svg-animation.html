@@ -1,0 +1,57 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+<section id="section-{{$context.title | urlize }}">
+    <div class="relative flex flex-col items-center justify-center w-full
+    {{- if eq .styling.full false }} container mx-auto {{ end -}}
+    {{- if eq .styling.center true }} text-center {{ end -}}
+    {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+    {{- if .styling.background }} bg-cover bg-center {{ end -}}
+    {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+    {{- if .styling.textColor }} {{ .styling.textColor }} {{- else }} text-white {{ end -}}
+    {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+    {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+    "
+
+     {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+    >
+        {{if .styling.background}}
+        <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+        {{end}}
+        {{partial "blocks/components/comp-intro" . }}
+        {{partial "blocks/components/comp-nav" . }}
+        <div class="container mx-auto">
+            {{if .image_sm }}
+            <div class="md:hidden  w-full">
+                {{ $pathArr := split .image_sm  "." }}
+                {{ $pathLen := len $pathArr }}
+                {{ $ext := index $pathArr (sub $pathLen 1) }}
+                {{ if eq $ext "svg" }}
+                    {{  readFile (print "static" .image_sm) | safeHTML }}
+                {{end}}
+            </div>
+            {{end}}
+            {{if .image_md }}
+                <div class="hidden md:block lg:hidden w-full">
+                    {{ $pathArr := split .image_md  "." }}
+                    {{ $pathLen := len $pathArr }}
+                    {{ $ext := index $pathArr (sub $pathLen 1) }}
+                    {{ if eq $ext "svg" }}
+                        {{  readFile (print "static" .image_md) | safeHTML }}
+                    {{end}}
+                </div>
+            {{end}}
+            {{if .image_lg }}
+                <div class="hidden  lg:block  w-full">
+                    {{ $pathArr := split .image_lg  "." }}
+                    {{ $pathLen := len $pathArr }}
+                    {{ $ext := index $pathArr (sub $pathLen 1) }}
+                    {{ if eq $ext "svg" }}
+                        {{  readFile (print "static" .image_lg) | safeHTML }}
+                    {{end}}
+                </div>
+            {{end}}
+        </div>
+    </div>
+</section>
+{{end}}

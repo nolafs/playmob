@@ -1,0 +1,79 @@
+<div class="w-full max-w-md" x-data x-show="$store.profile.isLoggedIn">
+    <div class="grid grid-cols-2 gap-6">
+        <div class="col-span-2 gap-6"  >
+            <div class="card compact side card-bordered bg-base-100">
+                <div class="flex flex-row space-x-2 card-body">
+                    <div class="flex-none">Username: </div>
+                    <div class="flex-1" x-text="$store.profile.currentUser.email"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-2 card  compact side card-bordered" x-data="userDetails">
+            <div class="card-body">
+                <div class="mb-4 card-title flex flex-row items-center">
+                    <h2 class=" flex-1">User Details:</h2>
+                    <!--
+                    <button x-show="!edit" data-tip="Edit" class="tooltip tooltip-bottom" @click="toggle()"><i class="far fa-edit fa-sm"></i></button>
+                    <button x-show="edit" data-tip="Edit" class="tooltip tooltip-bottom" @click="toggle()"><i class="far fa-window-close fa-sm"></i></button>
+                    -->
+                </div>
+                <template x-if="edit">
+                    <form class="form-control" action="" x-init="formSetup()" @focusout="change" @input="change" @submit="submit" x-show="!success">
+
+                        <label class="label">
+                            <span class="label-text">Full Name</span>
+                        </label>
+                        <input name="full_name" type="text" id="full_name" placeholder="Full Name" x-model="$store.profile.getUserFullName().fullName"  class="input"
+                               x-bind:class="{'input-error input-bordered mb-0': full_name.errorMessage}"
+                               data-rules='["required"]' data-server-errors='[]'
+                        >
+
+                        <label class="label">
+                            <span class="label-text">Nickname</span>
+                        </label>
+                        <input name="nickname" type="text" id="nickname" placeholder="nickname"  class="input"
+                               x-bind:class="{'input-error input-bordered mb-0': nickname.errorMessage}"
+                               data-rules='[]' data-server-errors='[]'
+                        >
+
+                        <label class="label">
+                            <span class="label-text">Bio</span>
+                        </label>
+                        <textarea name="bio"  id="bio" placeholder="bio" rows="4" cols="50"  class="textarea"
+                               x-bind:class="{'input-error input-bordered mb-0': bio.errorMessage}"
+                               data-rules='[]' data-server-errors='[]'
+                        ></textarea>
+
+                        <div class="w-full max-w-md text-center mt-10 font-bold" x-show="(authError)" x-transition:enter>
+                            <span x-html="message"></span>
+                        </div>
+                        <input type="submit" class="mt-10 btn btn-accent" x-show="!loading">
+                        <button class="mt-10 btn btn-accent btn-outline loading" x-show="loading">Updating</button>
+                    </form>
+                </template>
+                <div x-show="!edit">
+                    <div class="flex flex-row space-x-2  mb-4">
+                        <div class="flex-none font-bold">Full Name:</div>
+                        <div class="flex-1" x-text="$store.profile.getUserFullName().fullName"></div>
+                    </div>
+                    <div class="flex flex-row space-x-4  mb-4">
+                        <div class="flex-none font-bold">Nickname:</div>
+                        <div class="flex-1" x-text="$store.profile.getUserFullName().fullName"></div>
+                    </div>
+                    <!--
+                    <div class="flex flex-col">
+                        <div class="flex-1 font-bold">Bio:</div>
+                        <div class="flex-1" x-text="$store.profile.getUserFullName().fullName"></div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-error col-span-2">
+            <div class="flex-1">Danger-zone: Delete account here</div>
+            <div class="flex-none">
+                <button class="btn btn-white">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

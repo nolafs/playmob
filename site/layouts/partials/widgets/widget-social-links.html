@@ -1,0 +1,11 @@
+<div class="social-menu mt-5 flex flex-row gap-1.5">
+{{- range $media := $.Site.Data.socialmedia.links -}}
+    {{$hide := $media.hide | default false}}
+    {{- if eq $hide false -}}
+    <a href="{{$media.url}}" target="_blank" class="btn btn-circle text-neutral-content  {{$media.type | urlize}}"
+           aria-label="{{$media.type}}">
+            <i class="fab {{$media.id}} fa-2xl"></i>
+    </a>
+    {{- end -}}
+{{- end -}}
+</div>

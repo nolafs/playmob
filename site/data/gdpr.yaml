@@ -1,0 +1,14 @@
+consent:
+  p_txt: "#07023d"
+  b_bg: "#00adef"
+  message: This website uses cookies to ensure you get the best experience on our
+    website.
+  dismiss: Got it!
+  url: /privacy
+  b_txt: "#ffffff"
+  p_bg: "#ffffff"
+  type: opt-in
+  link: Privacy Policy
+osana:
+  active: false
+  script: https://cmp.osano.com/JD8rbbqReUcMwfEty/3b33e034-92f7-4805-8eed-99e1e4d9f39d/osano.js

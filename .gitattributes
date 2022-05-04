@@ -1,0 +1,5 @@
+site/static/uploads/*.gif filter=lfs diff=lfs merge=lfs -text
+site/static/uploads/*.jpg filter=lfs diff=lfs merge=lfs -text
+site/static/uploads/*.png filter=lfs diff=lfs merge=lfs -text
+site/static/uploads/*.webp filter=lfs diff=lfs merge=lfs -text
+static/downloads/** filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,26 @@
+{{ define "header" }}
+    {{ partial "hero/hero" . }}
+{{ end }}
+{{ define "main" }}
+    <div class="container mx-auto {{if .Content }} pt-5 {{else}} pt-20 {{end}} pb-20 px-5">
+        <div id="archive" class="grid grid-cols-1">
+            {{ $paginator := .Paginate  .Pages  }}
+            {{ range $paginator.Pages }}
+                <div class="border-b border-b-base-200">
+                    <div class="flex w-full gap-x-5 place-content-between items-center my-3">
+                        <div class="flex-grow">
+                            <h1 class="mb-0 text-lg md:text-2xl font-semibold tracking-wide">
+                                <span class="block">{{.Title | humanize }}</span>
+                            </h1>
+                        </div>
+                        <div>
+                                <a class="btn btn-sm md:btn-md md:btn-wide btn-secondary text-white" href="{{ .RelPermalink }}">More</a>
+                        </div>
+                    </div>
+
+                </div>
+            {{ end }}
+        </div>
+        {{ partial "pagination.html" (dict "context" . "paginator" .Paginator )}}
+    </div>
+{{ end }}

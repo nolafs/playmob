@@ -1,0 +1,189 @@
+{{ $url := trim .Context.Permalink "/" }}
+{{ $version := .Version }}
+{{ $current := .Context }}
+<div id="navigation"
+     :class="($store.navSetup.hasScrolled) ?
+     'shadow-lg bg-base-100 text-neutral'
+     : 'bg-transparent {{if $current.IsHome }} text-neutral-content {{else}} {{ if eq $current.Kind "page"}} text-neutral {{else}} text-neutral-content {{end}}{{end}}'"
+     class="inset-x-0 top-0 z-6 w-full transition duration-200 ease-in-out fixed">
+    <div class="container navbar w-full mx-auto" x-data="{over: false}" @mouseleave="over = false"
+         @mouseover="over = true">
+
+        <div class="px-2 mx-2 navbar-start">
+            {{if gt (len site.Params.logo) 0}}
+                <a href="{{ site.BaseURL }}" rel="home" class="logo-main">
+                    <img src="{{ site.Params.logo }}" alt="{{ site.Title | safeHTML }}"></a>
+            {{else}}
+                {{ if not ( len site.Data.theme.logo ) }}
+                    <span class="text-lg font-bold">
+                    <a href="{{ site.BaseURL | absLangURL }}">
+                        {{- site.Title | safeHTML -}}
+                    </a>
+                </span>
+                {{ else }}
+                    <a href="{{ site.BaseURL | absLangURL }}" class="block relative w-full transition duration-100 ease-in-out"
+                       x-show="($store.navSetup.disableHideLogo) ? true : !$store.navSetup.hideLogo" >
+
+                            <img src="{{ site.Data.theme.logo }}" alt="{{ site.Title | safeHTML }}" x-transition
+                                 class="absolute py-2 h-[60px] top-1/2 -translate-y-1/2" :class="(over || !$store.navSetup.hasScrolled) ? 'opacity-100' : 'opacity-0'">
+                            {{ $pathArr := split site.Data.theme.logo_alt "." }}
+                            {{ $pathLen := len $pathArr }}
+                            {{ $ext := index $pathArr (sub $pathLen 1) }}
+                            {{ if eq $ext "svg" }}
+                                <i x-transition class="block w-[40px] h-[40px] transition duration-200 ease-in-out"
+                                   :class="(!over && $store.navSetup.hasScrolled && $store.navSetup.disableHideLogo ) ? 'fill-base-content opacity-100': 'opacity-0 {{if $current.IsHome }} fill-base-content {{else}} fill-neutral-content {{end}}'"
+                                  >
+                                    {{  readFile (print "static" site.Data.theme.logo_alt) | safeHTML }}
+                                </i>
+                            {{else}}
+                                <img src="{{.site.Data.theme.logo_alt}}" alt="{{ site.Title | safeHTML }}" x-transition
+                                     class="absolute h-10 top-1/2 -translate-y-1/2" x-show="!over && $store.navSetup.hasScrolled">
+                            {{end}}
+
+
+                    </a>
+                {{ end }}
+            {{end}}
+        </div>
+        <div class="navbar-end">
+            <div class="flex-none hidden md:block">
+                <ul class="menu menu-horizontal p-0">
+                    {{ if not (.Context.Site.Data.theme.cms_navbar) }}
+                        {{ range site.Menus.navbar }}
+                            {{ $active := or ($current.IsMenuCurrent "navbar" .) ($current.HasMenuCurrent "navbar" .) }}
+                            {{ $active = or $active (eq .Name $current.Title) }}
+                            <li>
+                                <a href="{{ .URL }}"
+                                   class="btn-ghost btn {{if $active}} btn-active {{end}} drawer-button">
+                                    {{- .Name -}}
+                                </a>
+                            </li>
+                        {{ end }}
+                    {{ else }}
+                        {{if (.Context.Site.Data.theme.active) }}
+                            {{- range $index, $content := .Context.Site.Data.theme.items -}}
+                                {{$draft := false}}
+                                {{$link := $content.link}}
+                                {{$name := $content.name }}
+                                {{$active := $content.active }}
+
+                                {{- if isset . "page" -}}
+                                    {{$page := $current.Site.GetPage  "/" (.page | urlize  )}}
+                                    {{$draft = $page.Params.draft }}
+                                    {{$link = $page.Permalink}}
+                                    {{$name = $page.Title}}
+                                {{- end -}}
+                                {{- if eq $draft false -}}
+                                    {{- if $active -}}
+                                        {{ $activeLink := (eq  ($name | urlize)  ($current.Page.Title | urlize))  }}
+                                        {{range $content.items}}
+                                            {{if (eq (.name | urlize)  ($current.Page.Title | urlize  )) }}
+                                                {{$activeLink = true}}
+                                            {{end}}
+                                        {{end}}
+                                        {{if $current.Page.Parent }}
+                                            {{ $activeLink := or (eq $name  $current.Page.Title) (eq $name  $current.Page.Parent.Title)  }}
+                                        {{end}}
+                                        <li tabindex="{{$index}}">
+                                            {{if $link }}
+                                                <a href="{{ $link }}"
+                                                   class="btn lg:btn-lg btn-ghost border-none {{if $activeLink}} btn-active {{end}} active:bg-transparent active:text-secondary-content ">
+                                                    {{- $name -}} {{- if $content.items -}}
+                                                        <i class="fa-solid fa-chevron-down"></i> {{- end -}}
+                                                </a>
+                                            {{else}}
+                                                <div class="btn lg:btn-lg btn-ghost border-none active:bg-transparent active:text-secondary-content {{if $activeLink}} btn-active {{end}}">
+                                                    {{- $name -}} {{- if $content.items -}}
+                                                        <i class="fa-solid fa-chevron-down"></i> {{- end -}}
+                                                </div>
+                                            {{end}}
+                                            {{- with $content.items -}}
+                                                <ul class="p-2 bg-base-100 text-base-content shadow-lg">
+                                                    {{range $content.items}}
+                                                        {{$draftSub := false}}
+                                                        {{$linkSub := .link}}
+                                                        {{$nameSub := .name }}
+                                                        {{$activeSub := .active }}
+                                                        {{if isset . "page"}}
+                                                            {{$pageSub := $current.Site.GetPage  "/" ( .page | urlize  )}}
+                                                            {{$linkSub = $pageSub.Permalink}}
+                                                            {{$nameSub = $pageSub.Title}}
+                                                        {{end}}
+                                                        {{- if eq $draftSub false -}}
+                                                            {{- if $activeSub -}}
+                                                                {{ $activeLinkSub := (eq ($nameSub | urlize )  ($current.Page.Title | urlize)) }}
+                                                                <li><a href="{{ $linkSub }}"
+                                                                       class="text-black  {{if $activeLinkSub}} text-secondary {{end}} active:bg-base-100 active:text-secondary-content">{{ $nameSub }}</a>
+                                                                </li>
+                                                            {{- end -}}
+                                                        {{- end -}}
+                                                    {{- end -}}
+                                                </ul>
+                                            {{- end -}}
+                                        </li>
+                                    {{- end -}}
+                                {{- end -}}
+                            {{- end -}}
+                        {{ else }}
+                            {{- range $index, $content := where .Context.Site.Pages  "Kind" "page" -}}
+                                {{ $activeLink := (eq .Title  $current.Page.Title) }}
+                                <li>
+                                    <a href="{{ .Permalink }}"
+                                       class="btn btn-lg btn-ghost border-none {{if $activeLink}} btn-active {{end}} mx-1">
+                                        {{-  $content.Title -}}
+                                    </a>
+                                </li>
+                            {{- end -}}
+                        {{end}}
+                    {{ end }}
+                </ul>
+            </div>
+            {{ if .Context.IsTranslated }}
+                <translations>
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" class="m-1 btn btn-link btn-ghost">{{.Context.Site.Language.Lang}}</div>
+                        <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-neutral rounded-box w-52">
+                            {{ range .Context.Translations }}
+                                <li>
+                                    <a hreflang="{{ .Language.Lang }}"
+                                       href="{{ .Permalink }}">{{ .Language.LanguageName }}</a>
+                                </li>
+                            {{ end}}
+                        </ul>
+                    </div>
+
+                </translations>
+            {{ end }}
+
+
+            {{if eq  $current.Site.Params.themeSwitch "true" }}
+                <div x-data>
+                    <input type="checkbox" checked="checked" class="toggle toggle-sm align-text-bottom"
+                           x-model="$store.navSetup.isLight">
+                </div>
+            {{ end }}
+            <div>
+                {{partial "search/search-button"  .Context }}
+            </div>
+            {{ if $current.Site.Params.login }}
+                <login>
+                    {{partial "account/login-button" . }}
+                </login>
+            {{end}}
+            {{if .Context.Site.Data.theme.items}}
+                <div class="flex-none md:hidden">
+                    <label class="btn btn-link  border-none swap swap-rotate"
+                           :class="($store.navSetup.hasScrolled) ?
+                             'text-neutral'
+                             : '{{if $current.IsHome }} text-neutral-content {{else}} {{ if eq $current.Kind "page"}} text-neutral {{else}} text-neutral-content {{end}}{{end}}'"
+                    >
+                        <input type="checkbox" x-model="$store.navSetup.isOpen" @click="$store.navSetup.toggle()"/>
+                        <i class="swap-off fa-solid fa-bars-sort fa-lg"></i>
+                        <i class="swap-on fas fa-times fa-lg"></i>
+                    </label>
+                </div>
+            {{end}}
+
+        </div>
+    </div>
+</div>

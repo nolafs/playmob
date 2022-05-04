@@ -1,0 +1,20 @@
+{{if .client }}
+    {{$details := .details | default true}}
+    {{$classes := .classes | default ""}}
+    {{$client := .client}}
+    {{$data := newScratch }}
+    {{range site.Data.clients }}
+        {{if eq .title $client }}
+            {{$data.Set "client" .}}
+        {{end}}
+    {{end}}
+    {{with $data.Get "client"}}
+        {{if eq $details true}}
+            <label for="client-modal" class="modal-button">
+                {{partial "util/image-lfg" (dict "image" .logo  "ratio" "auto" "baseSize" "100" "classes" $classes)}}
+            </label>
+        {{else}}
+            {{partial "util/image-lfg" (dict "image" .logo  "ratio" "height"  "baseSize" "100" "classes" $classes )}}
+        {{end}}
+    {{end}}
+{{end}}

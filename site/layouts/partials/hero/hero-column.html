@@ -1,0 +1,23 @@
+<div x-data x-init="$store.navSetup.disableHideLogo = true" class="hero min-h-screen md:min-h-screen/2 lg:max-h-[680px] bg-neutral bg-gradient-to-br from-neutral to-info text-neutral-content pt-28 md:pt-20 md:pb-20">
+    <div class="container mx-auto">
+        <div class="hero-content max-w-full flex-col md:flex-row">
+            <div class="md:w-9/12 lg:w-6/12">
+                <h1 class="font-title mb-2 lg:max-w-[550px] text-3xl md:text-4xl lg:text-5xl font-bold">
+                   {{.Params.hero_title | markdownify }}
+                </h1>
+                <div class="text-base md:text-xl lg:text-2xl leading-tight mt-10"> {{.Params.hero_body | markdownify | truncate 150}}</div>
+                <div class="mt-10">
+                    {{$page := where site.Pages ".Params.title"  .Params.hero_collection}}
+                    {{$ctx := .}}
+                    {{range $page }}
+                        <a href="{{.RelPermalink}}" class="btn btn-secondary text-white btn-block md:btn-wide lg:btn-lg normal-case">{{$ctx.Params.hero_link_label}}</a></div>
+                    {{end}}
+            </div>
+            <div class="mt-10 md:mt-0 lg:w-6/12 ">
+                <div class="w-full grid justify-items-stretch">
+                 <img src="{{.Params.hero_img}}" alt="{{.Title}}" width="520" height="520" class="lazyload w-auto h-auto justify-self-end">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

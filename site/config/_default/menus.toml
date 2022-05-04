@@ -1,0 +1,14 @@
+############################
+## Menu
+############################
+[[navbar]]
+    identifier = "primary"
+    name = "primary"
+    url = "/"
+    weight = 1
+[[secondary]]
+    identifier = "Secondary"
+    name = "Secondary"
+    url = "/Secondary"
+    weight = 1
+

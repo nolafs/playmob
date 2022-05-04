@@ -1,0 +1,31 @@
+{
+  "extends": ["plugin:compat/recommended"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "expect": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module",
+    "impliedStrict": false
+  },
+  "parser": "@babel/eslint-parser",
+  "ignorePatterns": [
+    ".yarn/**",
+    "dist/**",
+    "vendor/**",
+    "node_modules/**",
+    "public/**",
+    "site/**"
+  ],
+  "rules": {
+    "no-use-before-define": [
+      "error", { "functions": false, "classes": true, "variables": true }],
+    "strict": [2, "global"],
+    "no-ex-assign": 2,
+    "no-console": 1
+  }
+}

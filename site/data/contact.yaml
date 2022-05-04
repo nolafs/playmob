@@ -1,0 +1,12 @@
+address: Tintagel House, 92 Albert Embankment, London, England, SE1 7TY
+contacts:
+  - content: +44 (0)20 8235 4046/8
+    name: Telephone
+    type: Telephone
+  - content: info@playmob.com
+    name: Email
+    type: Email
+enquiries:
+  - Marketing
+  - Sales
+privacy: privacy-cookie-disclaimer

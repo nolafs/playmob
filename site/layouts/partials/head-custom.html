@@ -1,0 +1,31 @@
+{{if .Site.Params.preloader }}
+{{ "<!-- Preloader -->" | safeHTML }}
+<style>
+    .loading {
+        position: fixed;
+        transform: translateZ(5px);
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        clip-path: polygon(0 0, 100% 0 , 100% 100%, 0 100% );
+        -webkit-clip-path: polygon(0 0, 100% 0 , 100% 100%, 0 100% );
+        z-index: 10000;
+    }
+    .loading > .container {
+        position: relative;
+        background: #ff6969;
+        height: 100vh;
+        width: 100vw;
+    }
+    .loading > .container > .holder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 62px;
+        height: 157px;
+        margin-top: -80px;
+        margin-left: -31px;
+    }
+</style>
+{{end}}

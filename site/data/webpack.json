@@ -1,0 +1,13 @@
+{
+  "main": {
+    "css": "main.css",
+    "js": "main.js"
+  },
+  "cms": {
+    "js": "cms.js"
+  },
+  "": {
+    "jpg": "images/share-img.jpg",
+    "html": "admin/index.html"
+  }
+}

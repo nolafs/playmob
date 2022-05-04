@@ -1,0 +1,45 @@
+logo: /uploads/logo.svg
+logo_alt: /uploads/playmob-logo-p.svg
+favicon: /uploads/icon-512x512.png
+placeholder_img: /uploads/casestudies-hero-playmob-light.png
+cms_navbar: true
+active: true
+items:
+  - active: true
+    name: Resources
+    items:
+      - active: true
+        name: Case Studies
+        link: /case-studies
+      - active: true
+        name: Reports
+        link: /reports
+  - active: true
+    name: News
+    page: News
+  - active: true
+    name: Contact
+    link: ""
+    page: Contact us
+theme: playmob
+footer_statement: ""
+footer_sections:
+  - section: Resources
+    footer_section_links:
+      - active: true
+        name: Case Studies
+        link: /
+      - active: true
+        name: Reports
+        link: /
+  - active: false
+    section: News
+    link: /news
+    page: News
+  - section: Contact
+    footer_section_links: []
+    page: Contact us
+download_popup:
+  title: Download Case Study
+  content: Lorem ipsum dolor sit amet, nominavi apeirian adolescens no duo.
+legal: © {year} Playmob. All Rights Reserved.

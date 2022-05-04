@@ -1,0 +1,16 @@
+.cc-categories {
+  .cc-btn {
+    display: flex;
+    input{
+      display: inline-block !important;
+      float: none !important;
+      position: relative !important;
+      width: 26px !important;
+      margin-right: 5px;
+    }
+  }
+}
+
+.cc-window.cc-type-categories .form{
+  display: flex;
+}

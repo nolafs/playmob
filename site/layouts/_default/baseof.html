@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html  xmlns="http://www.w3.org/1999/xhtml"{{with $.Site.Language }} xml:lang="{{.}}" lang="{{.}}"{{end}} x-data x-cloak {{$.Site.Params.themeSwitch }} {{if eq $.Site.Params.themeSwitch "true" }} x-bind:data-theme="($store.navSetup.isLight) ? '{{if $.Site.Data.theme.theme }}{{$.Site.Data.theme.theme}}{{else}}{{$.Site.Params.theme}}{{end}}' : 'dark'" data-theme="light" {{else}} data-theme="{{if $.Site.Data.theme.theme }}{{$.Site.Data.theme.theme}}{{else}}{{$.Site.Params.theme}}{{end}}" {{end}}>
+  {{ $page := .Page }}
+  {{ $currentPage := .Parent }}
+  {{ partial "head" . }}
+  <body x-data x-init="$store.profile.start()" x-on:logged="$store.profile.loggedIn()"  class="bg-base-100 {{ if ne .IsHome true -}}{{ $section := split .Section "/" }}{{range $section}}{{.}}{{- end -}}{{- end}} {{.Kind}}">
+    {{ partial "old-browser.html" . }}
+    {{if $.Site.Params.preloader }}
+    <div id="loader-overlay" class="loading">
+      <div class="container">
+        <div class="holder">
+          <div class="loader"><img src="/images/loading.gif" alt="loading"></div>
+        </div>
+      </div>
+    </div>
+    {{end}}
+ <div id="main" >
+  {{ "<!-- Navigation -->" | safeHTML }}
+  {{ block "navigation" . }}{{ partial "nav-main" (dict "Context" $ "Version" "")}}{{end}}
+      <div id="smooth-wrapper"  x-data x-init="$store.navSetup.scrollSmooth">
+          <div class="drawer drawer-mobile h-auto">
+              <input id="drawer-nav" type="checkbox" class="drawer-toggle" x-data x-model="$store.navSetup.isOpen">
+              <div  class="drawer-content overflow-hidden-x">
+                  <div id="smooth-content" >
+                  {{ "<!-- Main -->" | safeHTML }}
+                    <main>
+                      {{ block "header" . }}{{end}}
+                      {{ if not .IsHome }}
+                        {{ block "breadcrumbs" . }}{{ end }}
+                      {{end}}
+                      {{ block "main" . }}{{ end }}
+                    </main>
+                  {{ block "footer-pusher" . }}{{end}}
+                  {{ block "footer" . }}{{ partial "footer" . }}{{end}}
+                  {{ partial "accessible/accessible-panel" .}}
+                  </div>
+              </div>
+            <div class="drawer-side fixed w-full z-90">
+              {{ block "drawer-side" . }}
+                {{ partial "nav-mobile" (dict "Context" $ "Version" "")}}
+              {{end}}
+            </div>
+          </div>
+      </div>
+ </div>
+    {{ "<!-- POPUP -->" | safeHTML }}
+    {{ block "popup" . }}{{end}}
+
+    {{ partial "account/profile-drawer" . }}
+    {{ partial "foot" . }}
+    {{ "<!-- Search Overlay -->" | safeHTML }}
+
+  </body>
+</html>

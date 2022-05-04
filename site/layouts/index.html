@@ -1,0 +1,7 @@
+{{ define "header"}}
+    {{ partial "hero/hero-column"  . }}
+{{ end }}
+{{ define "main" }}
+    {{ .Render "content"}}
+    {{ partial "blocks/block-layout.html" (dict "context" . "global" $)}}
+{{end}}

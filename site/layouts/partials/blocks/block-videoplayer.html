@@ -1,0 +1,61 @@
+{{$context := .context }}
+{{$global := .global }}
+{{with $context}}
+<section id="section-{{$context.title | urlize }}">
+<div class="relative flex flex-col items-center justify-center w-full px-4 py-10 md:py-20
+    {{- if eq .styling.full false }} container mx-auto {{ end -}}
+    {{- if eq .styling.center true }} text-center {{ end -}}
+    {{- if eq .styling.card true}} card mb-10 md:mb-20 {{ end -}}
+    {{- if .styling.background }} bg-cover bg-center {{ end -}}
+    {{- if .styling.backgroundColor }} {{ .styling.backgroundColor }} {{end -}}
+    {{- if .styling.textColor}} {{ .styling.textColor -}} {{- else }} text-white {{ end -}}
+    {{- if .styling.height }} min-h-{{.styling.height}}{{- else }}min-h-screen/2{{ end -}}
+    {{- if .styling.classes }} {{.styling.classes}}{{ end -}}
+    "
+
+     {{if .styling.background}} style="background-image: url('{{.styling.background}}?nf_resize=smartcrop&w=1920&h=720')" {{end}}
+>
+    {{if .styling.background}}
+    <div class="absolute w-full h-full bg-neutral bg-opacity-60"></div>
+    {{end}}
+
+
+    {{ partial "blocks/components/comp-intro" . }}
+
+    <div class="w-full {{.max_width}}">
+
+        {{$watch := (split .video "=")}}
+
+        <div
+                class="ta-youtube ta-youtube-aspect-{{if .aspect}}{{.aspect}}{{else}}wide{{end}} {{if eq .border true}}border{{end}} bg-gray-800 {{if eq .rounded true}}rounded-lg{{end}} {{if eq .shadow true}}shadow-xl{{end}} overflow-hidden"
+                x-data="taYoutube()"
+                x-init="init()"
+                data-id="{{index $watch 1}}"
+                data-remember="false"
+                data-autoplay="true"
+        >
+            <button href="play" class="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer" x-on:click.prevent="show()" x-show="!active">
+                {{if .poster }}
+                <!--  Background image -->
+                <img class="lazyload ta-youtube-background ta-youtube-anim ta-youtube-anim-kenburns" src="{{.poster}}" alt="Background Image" title="Background Image" />
+                <!--  Darkening gradient -->
+                <div class="ta-youtube-gradient ta-youtube-gradient-dark"></div>
+                {{ end }}
+                <!--  Play button -->
+                <div class="ta-youtube-button flex items-center justify-center text-white transform duration-200 hover:scale-110" x-ref="button" alt="Show youtube video">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="fill-current w-full">
+                        <title>play-circle</title>
+                        <path d="M371.7 238l-176-107c-15.8-8.8-35.7 2.5-35.7 21v208c0 18.4 19.8 29.8 35.7 21l176-101c16.4-9.1 16.4-32.8.0-42zM504 256C504 119 393 8 256 8S8 119 8 256s111 248 248 248 248-111 248-248zm-448 0c0-110.5 89.5-2e2 2e2-2e2s2e2 89.5 2e2 2e2-89.5 2e2-2e2 2e2S56 366.5 56 256z"></path>
+                    </svg>
+                </div>
+            </button>
+            <!--  YouTube player -->
+            <template x-if="active">
+                <iframe  class="absolute inset-0 w-full h-full" :src="url" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </template>
+        </div>
+    </div>
+    {{partial "blocks/components/comp-nav" . }}
+</div>
+</section>
+{{end}}

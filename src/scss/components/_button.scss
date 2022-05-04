@@ -1,0 +1,46 @@
+.text-neutral-content {
+  .md\:btn-outline {
+    border-color: white !important;
+    color: white !important;
+  }
+}
+
+
+.btn-ghost {
+  @apply hover:bg-transparent hover:text-secondary;
+
+  &.btn-active {
+    @apply bg-transparent text-secondary;
+  }
+}
+
+.btn-secondary {
+  color: #ffffff !important;
+}
+
+.btn-info {
+  color: #ffffff !important;
+}
+
+#taxonomy-menu {
+  .btn-secondary {
+    @apply bg-white border-white text-neutral #{!important};
+
+    &.btn-active {
+      @apply bg-info text-white #{!important};
+    }
+  }
+}
+
+.btn-group {
+
+
+  .btn-secondary {
+    @apply bg-alt-500 border-alt-500 text-base-content #{!important};
+
+    &.btn-active {
+      @apply bg-secondary border-secondary text-white #{!important};
+    }
+  }
+}
+

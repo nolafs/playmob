@@ -1,0 +1,31 @@
+.social {
+  @apply gap-2;
+  > * {
+    @apply btn btn-circle border-0 text-2xl;
+  }
+
+  .facebook {
+    @apply bg-facebook border-facebook
+  }
+
+  .twitter {
+    @apply bg-twitter border-twitter
+  }
+
+  .linkedin {
+    @apply bg-linkedin border-linkedin
+  }
+}
+
+.facebook {
+  @apply bg-facebook border-facebook
+}
+
+.twitter {
+  @apply bg-twitter border-twitter
+}
+
+.linkedin {
+  @apply bg-linkedin border-linkedin
+}
+
