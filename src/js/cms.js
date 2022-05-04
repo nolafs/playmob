@@ -30,11 +30,11 @@ CMS.init({
     config: {
         load_config_file: false,
         local_backend: true,
-        site_url: 'https://luxury-marzipan-bd9173.netlify.app',
+        site_url: 'https://endearing-entremet-e48c8e.netlify.app',
         backend: {
             name: 'git-gateway',
             branch: 'main',
-            repo: "PlayMob/playMobSite"
+            repo: "nolafs/playmob"
         },
         //publish_mode: "editorial_workflow",
         media_folder: 'site/static/uploads',
