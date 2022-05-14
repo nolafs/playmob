@@ -118,7 +118,7 @@
     "@netlify/functions": "^0.11.0",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.4.0",
-    "@tailwindcss/postcss7-compat": "2.1.4",
+    "@tailwindcss/postcss7-compat": "2.2.17",
     "@tailwindcss/typography": "^0.5.0",
     "@zip.js/zip.js": "^2.3.23",
     "alpinejs": "^3.8.1",
